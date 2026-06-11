@@ -1,0 +1,23 @@
+# DRAFT — DO NOT SUBMIT. Blocked by: no Windows asset exists on the v0.8.1 release.
+PackageIdentifier: IslandDevCrew.Garnet
+PackageVersion: 0.8.1
+PackageLocale: en-US
+Publisher: Island Dev Crew
+PublisherUrl: https://github.com/Island-Dev-Crew
+PackageName: Garnet
+PackageUrl: https://github.com/Island-Dev-Crew/garnet
+License: MIT OR Apache-2.0
+LicenseUrl: https://github.com/Island-Dev-Crew/garnet/blob/main/LICENSE
+ShortDescription: Garnet language CLI — parse, check, run, test, and verify capability-aware Garnet programs.
+Description: |-
+  Garnet is an agent-native programming language. The CLI provides parse /
+  check / run / test / new / keygen / build --sign / verify / convert, with a
+  capability-aware checker and deterministic verification surfaces.
+Moniker: garnet
+Tags:
+  - garnet
+  - language
+  - compiler
+  - capabilities
+ManifestType: defaultLocale
+ManifestVersion: 1.6.0

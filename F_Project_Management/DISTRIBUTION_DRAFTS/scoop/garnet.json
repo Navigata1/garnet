@@ -1,0 +1,31 @@
+{
+    "##": "DRAFT - DO NOT SUBMIT. Blocked by: no Windows asset exists on the v0.8.1 release. The url targets the PLANNED asset name (S167 draft slice); hash is an all-zeros placeholder that must come from a signed SHA256SUMS once the asset exists. Upstreaming to any bucket is Jon-owned.",
+    "version": "0.8.1",
+    "description": "Garnet language CLI - parse, check, run, test, and verify capability-aware Garnet programs.",
+    "homepage": "https://github.com/Island-Dev-Crew/garnet",
+    "license": "MIT OR Apache-2.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/Island-Dev-Crew/garnet/releases/download/v0.8.1/garnet-0.8.1-x86_64-pc-windows-msvc.zip",
+            "hash": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+    },
+    "bin": [
+        "garnet.exe",
+        "garnet-lsp.exe"
+    ],
+    "checkver": {
+        "github": "https://github.com/Island-Dev-Crew/garnet"
+    },
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/Island-Dev-Crew/garnet/releases/download/v$version/garnet-$version-x86_64-pc-windows-msvc.zip"
+            }
+        },
+        "hash": {
+            "url": "https://github.com/Island-Dev-Crew/garnet/releases/download/v$version/SHA256SUMS",
+            "regex": "$sha256\\s+$basename"
+        }
+    }
+}

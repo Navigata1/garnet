@@ -1,0 +1,23 @@
+# DRAFT — DO NOT SUBMIT. Blocked by: no Windows asset exists on the v0.8.1 release.
+# InstallerUrl targets the PLANNED asset name (S167 draft slice); the asset does not exist yet.
+# InstallerSha256 is an all-zeros PLACEHOLDER — it MUST be replaced with the real hash from a
+# signed SHA256SUMS once the Windows zip is produced. Submitting before then is impossible
+# (winget-pkgs CI downloads and hash-checks the URL) and is Jon-owned in any case.
+PackageIdentifier: IslandDevCrew.Garnet
+PackageVersion: 0.8.1
+MinimumOSVersion: 10.0.17763.0
+InstallerType: zip
+NestedInstallerType: portable
+NestedInstallerFiles:
+  - RelativeFilePath: garnet.exe
+    PortableCommandAlias: garnet
+  - RelativeFilePath: garnet-lsp.exe
+    PortableCommandAlias: garnet-lsp
+Commands:
+  - garnet
+Installers:
+  - Architecture: x64
+    InstallerUrl: https://github.com/Island-Dev-Crew/garnet/releases/download/v0.8.1/garnet-0.8.1-x86_64-pc-windows-msvc.zip
+    InstallerSha256: 0000000000000000000000000000000000000000000000000000000000000000
+ManifestType: installer
+ManifestVersion: 1.6.0

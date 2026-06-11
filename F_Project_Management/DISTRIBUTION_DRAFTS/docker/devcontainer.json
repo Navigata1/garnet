@@ -1,0 +1,14 @@
+{
+    "name": "Garnet 0.8.1 (S166-S178 draft - not published)",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "overrideCommand": true,
+    "customizations": {
+        "vscode": {
+            "extensions": []
+        }
+    },
+    "remoteUser": "root",
+    "postCreateCommand": "garnet --version"
+}

@@ -1,0 +1,7 @@
+# DRAFT — DO NOT SUBMIT. Blocked by: no Windows asset exists on the v0.8.1 release.
+# Version manifest — winget 3-file manifest set (S166–S178 distribution band draft).
+PackageIdentifier: IslandDevCrew.Garnet
+PackageVersion: 0.8.1
+DefaultLocale: en-US
+ManifestType: version
+ManifestVersion: 1.6.0
