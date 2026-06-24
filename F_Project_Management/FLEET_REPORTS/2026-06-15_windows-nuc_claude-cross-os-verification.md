@@ -1,0 +1,107 @@
+# Fleet Report — Windows NUC Cross-OS Verification — Tier-0 Checkpoint — 2026-06-15
+
+**Lane:** Windows NUC cross-OS verification (Claude Code, Opus 4.8, ultracode), parallel to the
+MacBook Pro foundation-integrity lead. **Machine:** GMKtec NucBox M2Pro_S (`NUCBOX_M2PRO_S`),
+**Windows 10.0.26200.8457**. WSL2 Ubuntu (root) at `~/garnet` (ext4).
+**Commit verified against:** `origin/main` @ **`82c3e8e`** (PR-2). Windows checkout and WSL clone
+both fast-forwarded to `82c3e8e`. **No frozen crate edited** (garnet-check/interp/vm/cli-core/xtask
+are read-only on this lane). Evidence-only; OS-stamped. No authority claimed without a Windows trap.
+
+## Tier-0 PR merge status (recon)
+| PR | Merged? | Unblocks | Result |
+|---|---|---|---|
+| PR-1 `truth-gate fail-closed + examples-gate` (#409, e73ecc8) | ✅ merged | WV-3 | see below |
+| PR-2 `test-runner entry-authority parity` (#410, 82c3e8e) | ✅ merged | WV-1 | ✅ VERIFIED |
+| PR-3 (VM⇄interp scope) | ❌ not merged | WV-2 | **HELD** (WAIT-GATE; not raced) |
+
+---
+
+## WV-1 — test-runner entry-authority parity (PR-2) — ✅ VERIFIED on Windows
+`garnet test` routes test functions through the program-entry capability frame, so a `@caps()`
+test exercising undeclared host authority FAILS with the same deterministic trap `garnet run`
+raises — proven on Windows, not inferred from Mac.
+
+- **Integration test** `cargo test -p garnet-cli --test test_entry_authority` → **4/4 pass** on
+  Windows (`NUCBOX_M2PRO_S`): `test_runner_enforces_entry_authority_like_run`,
+  `run_rejects_undeclared_fs_at_entry`, `test_runner_allows_declared_caps`,
+  `test_runner_passes_pure_computational_test`.
+- **Manual probe (verbatim Windows trap):** a `@caps()` test calling `read_file` via a helper →
+  `exit=1`, output:
+  `test test_fs_leak ... FAILED: capability: ` + "`fs::read_file` requires @caps(fs), not declared in the calling chain"` ` ; `test result: FAILED. 0 passed; 1 failed`.
+- **Note vs the slice text:** WV-1 described an "`@caps(proc)` helper"; the merged fixture uses the
+  **fs** authority trap (`requires @caps(fs)`). Verified the trap as actually merged.
+- **Proposed cross-OS proof-table row** (for `GARNET_CROSS_OS_REPRODUCIBILITY.md`, lead-lane to merge):
+  `test-runner entry-authority parity (PR-2) | ✅ Windows (4/4 + manual trap) | (Mac per lead) | (Linux per lead) | garnet-cli/tests/test_entry_authority.rs`.
+
+## WV-3 — truth-gate + examples-gate (PR-1)
+**Examples-gate: ✅ GREEN on Windows.** All 33 `examples/*.garnet` check with **exit 0**;
+PR-1's new `documented_math.garnet` → "4 functions checked, 6 boundary call sites, 0 diagnostics".
+(3 `novel_*` examples emit an expected **stability advisory** for the experimental
+`std::base64::encode` primitive — still exit 0, not a failure.)
+
+**Truth-gate mechanism: ✅ works on Windows** (`truth --check` correctly fails-closed). **But the
+gate is RED on Windows for a non-PR-1 reason — a confirmed Windows-only reporter divergence (see
+Finding A).** `cargo run -p xtask -- truth --check` →
+`docs/truth.json: truth:readiness_pct expected 92.7, found 92.8` (exit 1). truth.json's value
+(92.8) is **correct** (matches the committed-proofs / Linux reading); Windows is the outlier at 92.7.
+
+---
+
+## FINDING A (BLOCKER — Windows-only divergence) — readiness reporter is blind to committed proof bundles on Windows
+**What:** `scripts/garnet_mit_readiness_status.py` computes **`completion_percent` = 92.7 on Windows
+vs 92.8 on WSL/Linux at the same commit `82c3e8e`** (truth.json = 92.8). This makes `truth.json`
+non-reproducible cross-OS and fails `truth --check` on Windows only.
+
+**Root cause (pinpointed, OS-stamped):** two evidence-scored lanes diverge —
+- `windows_linux_domain_proof_matrix`: **win = 60 `source-present` `class=local`** vs
+  **lin = 100 `verified` `class=committed`**. The Linux run reads the committed bundle
+  `proofs/windows/domains/windows-domain-matrix-20260603-0855/garnet-studio-domain-matrix.json`;
+  the Windows run reports it "found no verified `--suite all` bundle" and falls back to a
+  machine-local desktop root.
+- `windows_linux_distribution`: win = 74 vs lin = 71.
+
+**Proof it is a Windows discovery bug, not local-state contamination:**
+1. The committed bundle file **is present and git-tracked** in the Windows checkout (`Test-Path` = True; `git ls-tree origin/main` = yes).
+2. Re-running the Windows reporter with `GARNET_STUDIO_DOMAIN_MATRIX_ROOT` pointed at a **fresh empty dir** (so no local bundle can shadow the committed one) **still** yields 60/`source-present`/`local` and overall 92.7 — i.e. Windows never reads the committed `proofs/...` bundle at all.
+
+**Impact / why it's a blocker:** if/when `truth --check` is wired into CI (currently Jon-gated per
+`xtask/src/truth.rs`), it would **fail on any Windows runner** while passing on Linux/Mac. The truth
+surface is currently only reproducible on non-Windows.
+**Recommended fix (reporter, `scripts/` — non-frozen; proposed, NOT applied by this lane):** make the
+committed-proofs discovery for these lanes path-portable on Windows (likely a `/`-separated glob or
+`Path` join that doesn't match on Windows). Verify by re-running the reporter on Windows and Linux
+and confirming identical `completion_percent`. **Held as a flagged finding, not patched**, per
+"prefer forcing fallback over shipping a Windows behavior that disagrees with the reference" + the
+truth surface being gate-adjacent.
+
+## FINDING B (crash-surface — cross-OS latent) — `garnet test` panics on a parse-error test file
+**What:** `garnet test <dir>` **panics** — `thread 'main' panicked at garnet-cli/src/cmd/test.rs:180:18:
+attempt to subtract with overflow` (exit 101) — when a discovered test file fails to parse.
+Reproduced on Windows with a clean (no-BOM) file `tests/bad.garnet` containing `}` →
+`parse error … UnexpectedToken { … RBrace … span { start: 0, len: 1 } }` then the panic.
+
+**Root cause (read-only inspection of the frozen crate):** `test.rs:180` is
+`let passed = total_run - total_failed;`. A test *file* that fails to parse increments
+`total_failed` without incrementing `total_run`, so `0 - 1` underflows (`usize`) → debug panic /
+release silent-wrap. **OS-independent integer arithmetic → cross-OS latent** (not a Windows
+divergence; lead lane should confirm the Mac/Linux debug-build panic). PR-2 touched `cmd/test.rs`,
+so this is adjacent to the just-merged change. **Frozen crate — recorded + flagged, not patched.**
+Suggested fix for the owner: `total_run.saturating_sub(total_failed)`, or count unparseable files
+separately from test pass/fail.
+
+---
+
+## Held / not yet run
+- **WV-2** (VM⇄interp scope proptest): BLOCKED — PR-3 not merged. Re-check next recon; not raced.
+- **WV-4** (Studio/app-workbench Playwright + Tauri smoke): not run this checkpoint — next loop.
+- **WV-5** (Windows/Linux distribution smoke): not run this checkpoint — next loop.
+  (Prior machine-local facts available: NSIS installer `Garnet Studio_0.8.1_x64-setup.exe` builds;
+  `winget validate` passed on the draft manifest; no Linux hypervisor on this box → clean-Linux
+  buckets stay DEFERRED, WSL = portability-only.)
+
+## Claim boundaries
+Proves: WV-1 trap holds on Windows; examples-gate green on Windows; the two findings above, with the
+exact commands/outputs, on `NUCBOX_M2PRO_S / Windows 10.0.26200.8457` at `82c3e8e`. Does **not**
+prove: anything about Mac/Linux beyond the WSL readiness comparison used to isolate Finding A; WV-2;
+WV-4/WV-5; any OS-sandbox enforcement. No production/1.0/tag claim. No frozen crate, gate, CI, or
+release asset was modified.
