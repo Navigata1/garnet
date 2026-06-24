@@ -88,7 +88,7 @@ and confirming identical `completion_percent`. **Held as a flagged finding, not 
 "prefer forcing fallback over shipping a Windows behavior that disagrees with the reference" + the
 truth surface being gate-adjacent.
 
-## FINDING B (crash-surface — cross-OS latent) — `garnet test` panics on a parse-error test file
+## FINDING B (crash-surface — cross-OS latent) — `garnet test` panics on a parse-error test file — ✅ CLOSED by #414 (Checkpoint 2)
 **What:** `garnet test <dir>` **panics** — `thread 'main' panicked at garnet-cli/src/cmd/test.rs:180:18:
 attempt to subtract with overflow` (exit 101) — when a discovered test file fails to parse.
 Reproduced on Windows with a clean (no-BOM) file `tests/bad.garnet` containing `}` →
@@ -114,9 +114,40 @@ WV-3 examples-gate ✅; WV-3 truth-gate mechanism ✅ but RED on Windows via Fin
   `winget validate` passed on the draft manifest; no Linux hypervisor on this box → clean-Linux
   buckets stay DEFERRED, WSL = portability-only.)
 
+---
+
+## Checkpoint 2 — next-tier verification (origin/main @ `0ec71b2`)
+Five PRs merged after the Tier-0 set; the new Foundation tier + firewall work verified on Windows
+(`NUCBOX_M2PRO_S / Windows 10.0.26200.8457`), all green:
+
+| PR | What | Windows acceptance test | Result |
+|---|---|---|---|
+| PR-4 #412 | capability callable-identity unification (Tier-0) | `garnet-check --test caps_callable_identity` | ✅ 4/4 |
+| #413 | checked +/−/×/unary-neg integer overflow, BOTH backends (RFC-0002) | `garnet-cli --test overflow_parity` + `garnet-interp --test overflow_guards` | ✅ 6/6 + 14/14 |
+| #414 (J8) | process-abort firewall on eval/repl/**test**/doctest lanes | `garnet-cli --test panic_firewall_lanes` | ✅ 6/6 |
+| #415 | cycle/depth guard in `Value::display/debug` (firewall follow-up) | `garnet-cli --test cyclic_value_render` | ✅ 1/1 |
+
+**Finding B — CLOSED by #414 (verified on Windows).** Re-ran the exact parse-error probe
+(`tests/bad.garnet` = `}`) against the firewalled binary @ `0ec71b2`: **exit code 1, no panic**
+(was exit 101 + `attempt to subtract with overflow`). Output now degrades cleanly to
+`garnet test: parse error … UnexpectedToken { … RBrace … }` then `test result: FAILED. 0 passed;
+1 failed` — the `usize` underflow is gone, the file counts as one failed unit. The firewall test's
+own docstring names this exact case ("a parse-error file, which used to underflow (`usize`) and
+abort the summary with exit 101"). Flagged → fixed by the lead lane → re-verified on Windows.
+
+**Finding A — STILL OPEN.** None of #412–#416 touch `scripts/garnet_mit_readiness_status.py` or its
+committed-proof discovery, so the Windows readiness divergence (92.7 Win vs 92.8 Linux; reporter
+blind to committed `proofs/` bundles on Windows) persists and `truth --check` stays RED on Windows.
+Carried forward for the lead lane / reporter owner.
+
+**Still ungated for this lane (next loop):** WV-4 (no Playwright harness exists in-repo — only the
+Tauri build/`--studio-smoke` is runnable; the `app_workbench` is the agentic-matrix skip toggle) and
+WV-5 (winget present; scoop absent; docker daemon down; NSIS installer present). No further Tier-0/1
+PRs pending verification at `0ec71b2` (#416 is a Jon-gated release-prep PR, not a runtime trap).
+
 ## Claim boundaries
-Proves: WV-1 trap holds on Windows; examples-gate green on Windows; the two findings above, with the
-exact commands/outputs, on `NUCBOX_M2PRO_S / Windows 10.0.26200.8457` at `82c3e8e`. Does **not**
-prove: anything about Mac/Linux beyond the WSL readiness comparison used to isolate Finding A; WV-2;
-WV-4/WV-5; any OS-sandbox enforcement. No production/1.0/tag claim. No frozen crate, gate, CI, or
-release asset was modified.
+Proves: WV-1/WV-2/WV-3 traps hold on Windows; the new tier (PR-4/#413/#414/#415) passes on Windows;
+Finding B closed and re-verified; the findings' exact commands/outputs on
+`NUCBOX_M2PRO_S / Windows 10.0.26200.8457` at `82c3e8e`→`0ec71b2`. Does **not** prove: anything about
+Mac/Linux beyond the WSL readiness comparison used to isolate Finding A; WV-4/WV-5; any OS-sandbox
+enforcement. No production/1.0/tag claim. No frozen crate, gate, CI, or release asset was modified.
