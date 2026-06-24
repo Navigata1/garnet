@@ -3,8 +3,8 @@
 **Lane:** Windows NUC cross-OS verification (Claude Code, Opus 4.8, ultracode), parallel to the
 MacBook Pro foundation-integrity lead. **Machine:** GMKtec NucBox M2Pro_S (`NUCBOX_M2PRO_S`),
 **Windows 10.0.26200.8457**. WSL2 Ubuntu (root) at `~/garnet` (ext4).
-**Commit verified against:** `origin/main` @ **`82c3e8e`** (PR-2). Windows checkout and WSL clone
-both fast-forwarded to `82c3e8e`. **No frozen crate edited** (garnet-check/interp/vm/cli-core/xtask
+**Commit verified against:** `origin/main` @ **`0d3c1d2`** (PR-3; WV-1/WV-3 verified at `82c3e8e`/PR-2).
+Windows checkout fast-forwarded to `0d3c1d2`. **No frozen crate edited** (garnet-check/interp/vm/cli-core/xtask
 are read-only on this lane). Evidence-only; OS-stamped. No authority claimed without a Windows trap.
 
 ## Tier-0 PR merge status (recon)
@@ -12,7 +12,7 @@ are read-only on this lane). Evidence-only; OS-stamped. No authority claimed wit
 |---|---|---|---|
 | PR-1 `truth-gate fail-closed + examples-gate` (#409, e73ecc8) | ✅ merged | WV-3 | see below |
 | PR-2 `test-runner entry-authority parity` (#410, 82c3e8e) | ✅ merged | WV-1 | ✅ VERIFIED |
-| PR-3 (VM⇄interp scope) | ❌ not merged | WV-2 | **HELD** (WAIT-GATE; not raced) |
+| PR-3 `VM⇄interp block-local scope parity` (#411, 0d3c1d2) | ✅ merged | WV-2 | ✅ VERIFIED |
 
 ---
 
@@ -32,6 +32,20 @@ raises — proven on Windows, not inferred from Mac.
   **fs** authority trap (`requires @caps(fs)`). Verified the trap as actually merged.
 - **Proposed cross-OS proof-table row** (for `GARNET_CROSS_OS_REPRODUCIBILITY.md`, lead-lane to merge):
   `test-runner entry-authority parity (PR-2) | ✅ Windows (4/4 + manual trap) | (Mac per lead) | (Linux per lead) | garnet-cli/tests/test_entry_authority.rs`.
+
+## WV-2 — VM⇄interpreter block-local scope parity (PR-3) — ✅ VERIFIED on Windows
+PR-3 detects enclosing-scope `let`/`var`/`const`/`for`-var shadowing at compile time and forces
+those functions onto the tree-walk fallback (the interpreter reference), with **no over-fallback**
+for the common case. Proven on Windows at `0d3c1d2`:
+
+- **Acceptance proptest** `cargo test -p garnet-vm --test scope_shadowing_parity` → **5/5 pass** on
+  Windows (`NUCBOX_M2PRO_S`): `probe_program_matches_interpreter` (the historically-divergent
+  `let x=1; if true { let x=2  x }; x` now agrees at `1` and lowers to fallback, not native),
+  `non_shadowing_program_stays_native_and_matches`, `same_scope_rebind_stays_native_and_matches`,
+  the generator meta-guard, and **`prop_vm_matches_interp_on_random_shadowing_programs` (300 random
+  nested-block programs, VM output == interpreter output on every one → zero block-local leakage)**.
+- **CLI-boundary probe (rebuilt @ 0d3c1d2):** on the divergent program, `garnet run --interp` → `=> 1`
+  and `garnet run --vm` → `=> 1` — identical on Windows. (Pre-PR-3 the VM would have returned `2`.)
 
 ## WV-3 — truth-gate + examples-gate (PR-1)
 **Examples-gate: ✅ GREEN on Windows.** All 33 `examples/*.garnet` check with **exit 0**;
@@ -91,8 +105,9 @@ separately from test pass/fail.
 
 ---
 
-## Held / not yet run
-- **WV-2** (VM⇄interp scope proptest): BLOCKED — PR-3 not merged. Re-check next recon; not raced.
+## Tier-0 complete — what's next
+**All three Tier-0 fixes (PR-1/PR-2/PR-3) now verified to hold on Windows** (WV-1 ✅, WV-2 ✅,
+WV-3 examples-gate ✅; WV-3 truth-gate mechanism ✅ but RED on Windows via Finding A).
 - **WV-4** (Studio/app-workbench Playwright + Tauri smoke): not run this checkpoint — next loop.
 - **WV-5** (Windows/Linux distribution smoke): not run this checkpoint — next loop.
   (Prior machine-local facts available: NSIS installer `Garnet Studio_0.8.1_x64-setup.exe` builds;
