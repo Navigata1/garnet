@@ -145,9 +145,45 @@ Tauri build/`--studio-smoke` is runnable; the `app_workbench` is the agentic-mat
 WV-5 (winget present; scoop absent; docker daemon down; NSIS installer present). No further Tier-0/1
 PRs pending verification at `0ec71b2` (#416 is a Jon-gated release-prep PR, not a runtime trap).
 
+---
+
+## Checkpoint 3 — #417 (truth-check CI gate) + WV-4/WV-5 smoke (origin/main @ `a7f946d`, 2026-06-25)
+
+**#417 `wire truth --check into CI` — verified on Windows; intersects Finding A.** The new
+machine-truth drift job is **`runs-on: ubuntu-latest`** (Linux only — not a Windows matrix), so the
+gate runs where it is green. `docs/truth.json` was touched but `readiness_pct` stays **92.8**
+(stamp still `c4b9e28-dirty`); the reporter was **not** changed. Re-ran `cargo run -p xtask -- truth
+--check` on Windows @ `a7f946d` → still **RED**: `readiness_pct expected 92.7, found 92.8` (exit 1).
+**Net:** Finding A's CI-break risk is correctly mitigated (Linux-only gate), but the **root reporter
+divergence is unfixed** — `truth --check` is a false-RED for any Windows contributor running it
+locally. **Finding A remains OPEN**, now with reduced blast radius.
+
+**WV-4 (Studio/app-workbench) — PARTIAL on Windows.** `apps/garnet-studio` is unchanged since the
+2026-06-12 build (0 commits since `9d15590`), so the committed Tauri **0.8.1** build proof stands;
+`garnet-studio.exe --studio-smoke` → **exit 0** (machine-local). **The "Playwright pass over the
+Studio UI" is NOT runnable — no Playwright harness exists in-repo** (`git ls-files | grep playwright`
+= empty; the `app_workbench` token is only the agentic-matrix `--skip-app-workbench` toggle).
+*Recommendation (fix-slice, not evidence):* add a Playwright config + a minimal Studio-UI smoke spec
+so this lane can actually exercise the UI rather than just the headless shell smoke.
+
+**WV-5 (distribution smoke, portability-labeled) — PARTIAL on Windows.** Tooling: winget v1.28.240
+present (validate available); **scoop absent**; docker 29.4.3 present but **daemon DOWN** (no image
+build); NSIS installer `Garnet Studio_0.8.1_x64-setup.exe` present (`07585423B286EE85…`). Draft
+winget/scoop manifests were authored + `winget validate`-passed on 2026-06-11 (fork branch
+`aux/2026-06-11-windows-nuc-claude-distribution`). **Deferred (honest):** live winget/scoop install
+needs a clean Windows Sandbox VM; Docker/devcontainer build needs the daemon up; **clean-Linux** needs
+a hypervisor — **none on this box (only Windows Sandbox)**, so clean-Linux + Linux-desktop-GUI stay
+DEFERRED, WSL = portability-only. No registry submission, no asset mutation.
+
+**Lane status @ a7f946d:** all merged Tier-0/1 runtime traps verified on Windows (WV-1/2/3, PR-4,
+#413/#414/#415, #417); Finding B closed; Finding A open (CI-mitigated); WV-4/WV-5 advanced as far as
+the environment allows (Playwright harness + clean VMs are the remaining blockers). No further
+unverified Tier-0/1 PRs pending.
+
 ## Claim boundaries
-Proves: WV-1/WV-2/WV-3 traps hold on Windows; the new tier (PR-4/#413/#414/#415) passes on Windows;
-Finding B closed and re-verified; the findings' exact commands/outputs on
-`NUCBOX_M2PRO_S / Windows 10.0.26200.8457` at `82c3e8e`→`0ec71b2`. Does **not** prove: anything about
-Mac/Linux beyond the WSL readiness comparison used to isolate Finding A; WV-4/WV-5; any OS-sandbox
+Proves: WV-1/WV-2/WV-3 traps hold on Windows; the new tier (PR-4/#413/#414/#415) and #417's gate
+behave correctly on Windows; Finding B closed and re-verified; WV-4 shell smoke + WV-5 tooling, with
+exact commands/outputs, on `NUCBOX_M2PRO_S / Windows 10.0.26200.8457` across `82c3e8e`→`a7f946d`. Does
+**not** prove: anything about Mac/Linux beyond the WSL readiness comparison used to isolate Finding A;
+a Studio-UI Playwright pass (no harness); live channel installs; clean-Linux; any OS-sandbox
 enforcement. No production/1.0/tag claim. No frozen crate, gate, CI, or release asset was modified.
