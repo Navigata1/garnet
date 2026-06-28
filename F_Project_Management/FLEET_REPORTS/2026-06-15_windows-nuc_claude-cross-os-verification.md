@@ -197,6 +197,26 @@ bypass survived on the `eval`/`test`/`doctest`/preload lanes; #421 makes mediati
   the load-time gate cases). Source changes are in frozen crates (garnet-cli/interp/vm) — run-only, not edited.
 Finding A untouched (caps mediation, not the reporter) → still open. #419 is docs-only (no Windows trap).
 
+## Checkpoint 5 — loop Phase 2: WV-4 Playwright Studio-UI harness (the WV-4 gap closed)
+Built the first committed Playwright harness for the Studio UI (there was **none** in-repo despite the
+agentic-matrix `app_workbench` lane existing): `apps/garnet-studio/playwright.config.ts` +
+`e2e/studio-ui.spec.ts` + `@playwright/test` devDep + a `pretest:e2e` browser-install hook. It drives the
+built Vite `dist` in headless Chromium and asserts the overhaul's UI structure + pure-frontend behaviour.
+
+- **✅ 7/7 on Windows** (`NUCBOX_M2PRO_S`): splash holds→dismisses, all 8 panels present, simple-mode hides
+  the power-only panels, panel switching, safety-contract copy, ≥30 tooltips, status bar version+mode. Shell
+  contract gate (`test_garnet_windows_linux_studio_shell.py`) stays 7/7.
+- **Adversarial review** (correctness/contract-drift/flakiness/honesty + per-finding verify): 3 confirmed
+  findings APPLIED before PR — pretest auto-installs the pinned Chromium (no cold-checkout browser gap);
+  `reuseExistingServer:false` + env-port (no stale-server false pass); dropped a non-existent fleet-section
+  cite. Re-verified 7/7 after fixes.
+- **PR [#422] open, CI CLEAN/green** (PR dogfood evidence ✓, agentic matrix ✓, machine-truth drift guard ✓,
+  cargo test windows/macos/ubuntu ✓). Non-frozen `apps/garnet-studio` only; does NOT modify the gate it
+  merges under (the CI e2e job is a deliberate Jon-gated follow-up, NOT added here).
+- **PENDING:** the fork→IDC squash-merge needs the work-profile browser selection (asked; awaiting). The
+  desktop-shell drive (tauri-driver: Run→CommandResult, evidence bundle, persisted toggle) is the flagged
+  WV-4 follow-up — the Codex computer-use lane is the rigorous path for it.
+
 ## Claim boundaries
 Proves: WV-1/WV-2/WV-3 traps hold on Windows; the new tier (PR-4/#413/#414/#415), #417's gate, and #421's
 deny-by-default caps mediation behave correctly on Windows; Finding B closed and re-verified; WV-4 shell smoke +
