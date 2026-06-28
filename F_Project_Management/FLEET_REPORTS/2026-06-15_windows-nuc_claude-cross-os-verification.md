@@ -180,10 +180,27 @@ DEFERRED, WSL = portability-only. No registry submission, no asset mutation.
 the environment allows (Playwright harness + clean VMs are the remaining blockers). No further
 unverified Tier-0/1 PRs pending.
 
+---
+
+## Checkpoint 4 — Phase 1 of the loop: #421 deny-by-default caps mediation (origin/main @ `47a7ba7`, 2026-06-25)
+Recon found 3 commits since `a7f946d`: **#421** (`47a7ba7`, deny-by-default capability mediation, Jon-approved),
+**`4994867`** (S114 load-time caps + max-depth gates), and **#419** (docs-only S114 dossier). #421 closes the
+exact residual fail-open the prior Codex map flagged: `4994867` installed the program-entry `@caps` frame on
+run/VM/agent-loop, but `require_capability` stayed **fail-open at `active_frames == 0`**, so the host-authority
+bypass survived on the `eval`/`test`/`doctest`/preload lanes; #421 makes mediation deny-by-default on every lane.
+
+**✅ VERIFIED on Windows** (`NUCBOX_M2PRO_S / Windows 10.0.26200.8457 @ 47a7ba7`), **28/28**:
+- `garnet-cli --test s114_residual_lanes` → **6/6** (the keystone: `garnet eval read_file(secret)` and a
+  top-level-`let` test-file read both REFUSE with `requires @caps(fs)`; the `S114-RESIDUAL-SECRET` marker never
+  reaches stdout on any lane — exfiltration blocked).
+- `--test agent_loop` 10/10 · `--test bounded_enforcement` 5/5 · `--test test_entry_authority` 7/7 (extended with
+  the load-time gate cases). Source changes are in frozen crates (garnet-cli/interp/vm) — run-only, not edited.
+Finding A untouched (caps mediation, not the reporter) → still open. #419 is docs-only (no Windows trap).
+
 ## Claim boundaries
-Proves: WV-1/WV-2/WV-3 traps hold on Windows; the new tier (PR-4/#413/#414/#415) and #417's gate
-behave correctly on Windows; Finding B closed and re-verified; WV-4 shell smoke + WV-5 tooling, with
-exact commands/outputs, on `NUCBOX_M2PRO_S / Windows 10.0.26200.8457` across `82c3e8e`→`a7f946d`. Does
+Proves: WV-1/WV-2/WV-3 traps hold on Windows; the new tier (PR-4/#413/#414/#415), #417's gate, and #421's
+deny-by-default caps mediation behave correctly on Windows; Finding B closed and re-verified; WV-4 shell smoke +
+WV-5 tooling, with exact commands/outputs, on `NUCBOX_M2PRO_S / Windows 10.0.26200.8457` across `82c3e8e`→`47a7ba7`. Does
 **not** prove: anything about Mac/Linux beyond the WSL readiness comparison used to isolate Finding A;
 a Studio-UI Playwright pass (no harness); live channel installs; clean-Linux; any OS-sandbox
 enforcement. No production/1.0/tag claim. No frozen crate, gate, CI, or release asset was modified.
