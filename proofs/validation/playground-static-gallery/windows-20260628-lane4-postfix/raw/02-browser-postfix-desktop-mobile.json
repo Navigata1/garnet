@@ -1,0 +1,173 @@
+{
+  "schema": "garnet.validation.playground_static_gallery.postfix/browser/v1",
+  "captured_at_utc": "2026-06-28T07:24:39.791Z",
+  "source_commit": "29febc2c6b8657bdd0d9bcc3d61908e2389fa582",
+  "docsCount": 1,
+  "webCount": 1,
+  "states": [
+    {
+      "computed": {
+        "codeOverflowWrap": "anywhere",
+        "paneMinWidth": "0px"
+      },
+      "layout": {
+        "clientWidth": 1265,
+        "horizontalOverflow": false,
+        "innerHeight": 720,
+        "innerWidth": 1280,
+        "scrollWidth": 1265
+      },
+      "markers": {
+        "fakeEditorDisclosure": true,
+        "staticGallery": true,
+        "wasmRoadmap": true
+      },
+      "output": "Hello from Garnet!\n=> 0",
+      "selected": "Hello, Garnet",
+      "tabs": [
+        {
+          "index": 0,
+          "selected": true,
+          "text": "Hello, Garnet"
+        },
+        {
+          "index": 1,
+          "selected": false,
+          "text": "Docs-as-tests"
+        },
+        {
+          "index": 2,
+          "selected": false,
+          "text": "Web route dispatch"
+        }
+      ],
+      "title": "Garnet — Playground (static preview)",
+      "url": "http://127.0.0.1:8765/playground.html?postfix=lane4",
+      "label": "desktop-initial-hello",
+      "logs": []
+    },
+    {
+      "computed": {
+        "codeOverflowWrap": "anywhere",
+        "paneMinWidth": "0px"
+      },
+      "layout": {
+        "clientWidth": 1265,
+        "horizontalOverflow": false,
+        "innerHeight": 720,
+        "innerWidth": 1280,
+        "scrollWidth": 1265
+      },
+      "markers": {
+        "fakeEditorDisclosure": true,
+        "staticGallery": true,
+        "wasmRoadmap": true
+      },
+      "output": "double(21)      = 42\ntriangular(10)  = 45\nclamp(12, 0, 9) = 9\n=> nil",
+      "selected": "Docs-as-tests",
+      "tabs": [
+        {
+          "index": 0,
+          "selected": false,
+          "text": "Hello, Garnet"
+        },
+        {
+          "index": 1,
+          "selected": true,
+          "text": "Docs-as-tests"
+        },
+        {
+          "index": 2,
+          "selected": false,
+          "text": "Web route dispatch"
+        }
+      ],
+      "title": "Garnet — Playground (static preview)",
+      "url": "http://127.0.0.1:8765/playground.html?postfix=lane4",
+      "label": "desktop-docs-as-tests",
+      "logs": []
+    },
+    {
+      "computed": {
+        "codeOverflowWrap": "anywhere",
+        "paneMinWidth": "0px"
+      },
+      "layout": {
+        "clientWidth": 1265,
+        "horizontalOverflow": false,
+        "innerHeight": 720,
+        "innerWidth": 1280,
+        "scrollWidth": 1265
+      },
+      "markers": {
+        "fakeEditorDisclosure": true,
+        "staticGallery": true,
+        "wasmRoadmap": true
+      },
+      "output": "mvp_05_web_app routes: 61\n=> 61",
+      "selected": "Web route dispatch",
+      "tabs": [
+        {
+          "index": 0,
+          "selected": false,
+          "text": "Hello, Garnet"
+        },
+        {
+          "index": 1,
+          "selected": false,
+          "text": "Docs-as-tests"
+        },
+        {
+          "index": 2,
+          "selected": true,
+          "text": "Web route dispatch"
+        }
+      ],
+      "title": "Garnet — Playground (static preview)",
+      "url": "http://127.0.0.1:8765/playground.html?postfix=lane4",
+      "label": "desktop-web-route-dispatch",
+      "logs": []
+    },
+    {
+      "computed": {
+        "codeOverflowWrap": "anywhere",
+        "paneMinWidth": "0px"
+      },
+      "layout": {
+        "clientWidth": 375,
+        "horizontalOverflow": false,
+        "innerHeight": 844,
+        "innerWidth": 390,
+        "scrollWidth": 375
+      },
+      "markers": {
+        "fakeEditorDisclosure": true,
+        "staticGallery": true,
+        "wasmRoadmap": true
+      },
+      "output": "Hello from Garnet!\n=> 0",
+      "selected": "Hello, Garnet",
+      "tabs": [
+        {
+          "index": 0,
+          "selected": true,
+          "text": "Hello, Garnet"
+        },
+        {
+          "index": 1,
+          "selected": false,
+          "text": "Docs-as-tests"
+        },
+        {
+          "index": 2,
+          "selected": false,
+          "text": "Web route dispatch"
+        }
+      ],
+      "title": "Garnet — Playground (static preview)",
+      "url": "http://127.0.0.1:8765/playground.html?postfix=lane4-mobile",
+      "label": "mobile-390x844-initial",
+      "logs": []
+    }
+  ]
+}

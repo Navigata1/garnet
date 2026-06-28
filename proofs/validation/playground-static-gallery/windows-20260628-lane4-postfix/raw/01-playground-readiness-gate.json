@@ -1,0 +1,11 @@
+﻿{
+  "schema": "garnet.playground_readiness/v1",
+  "page_present": true,
+  "manifest_present": true,
+  "example_count": 3,
+  "examples_well_formed": true,
+  "page_references_manifest": true,
+  "honesty_markers_present": true,
+  "missing_markers": [],
+  "ok": true
+}
