@@ -1,0 +1,257 @@
+Garnet REPL — RB-7. :help for commands, :quit to exit.
+garnet>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+garnet> :
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+garnet> :help
+REPL commands:
+  <expr>            evaluate and print a value
+  def name(..) {..} register a top-level item (def/struct/enum/impl/...)
+  ?doc <name>       show a primitive's doc, arity, and required caps
+  ?<name>           shorthand for ?doc <name>
+  :caps             show the session's declared + available authority
+  :help  :h         this help
+  :quit  :q         leave the REPL  (Ctrl-D also exits)
+
+Editing: history (Up/Down), multiline (open `{`/`(`/`[` continues the
+input), and Tab completion over commands, primitives, and live bindings.
+garnet>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+garnet> ?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+garnet> ?doc read_file
+fs::read_file  (1-arg primitive)
+  caps: fs
+  layer: Std · stability: Stable
+  Read a UTF-8 file as String.
+garnet>
+
+
+
+
+
+
+
+
+
+
+
+
+garnet> @
+
+
+
+
+
+
+
+
+
+
+
+
+garnet> @caps(net)
+   ...>
+
+
+
+
+
+
+
+
+
+
+
+garnet> @caps(net)
+   ...> def fetch() { 1 }
+
+
+
+
+
+
+
+
+
+
+
+
+ok
+garnet>
+
+
+
+
+
+
+
+
+
+garnet> :
+
+
+
+
+
+
+
+
+
+garnet> :caps
+capability surface (declared + available — NOT an enforced budget;
+@caps is enforced per-function at entry, S90):
+
+  session-declared (by loaded @caps functions):
+    net: fetch
+
+  available primitives by capability:
+    env: std::env::get, std::env::set, std::env::vars
+    fs: fs::list_dir, fs::read_bytes, fs::read_file, fs::write_bytes, fs::write_file, std::log::to_file
+    net: net::tcp_connect, net::tcp_listen, net::udp_bind
+    proc: std::process::exit_code, std::process::output, std::process::spawn, std::process::spawn_ar
+rgs, std::process::wait
+    time: std::uuid::new_v4, std::uuid::new_v7, time::now_ms, time::sleep, time::wall_clock_ms
+garnet>garnet> def myhelper() { 7 }
+ok
+garnet>garnet> def myhero() { 8 }
+ok
+garnet>garnet> :
+
+
+garnet| :
+:caps  command
+:help  command
+:quit  command
+garnet>
+
+garnet> read
+
+garnet| read_
+read_bytes  primitive
+read_file   primitive
+garnet>
+
+
+garnet| myh
+myhelper  binding
+myhero    binding
+garnet>
+garnet> 40
+garnet> 40 + 2
+=> 42
+garnet>garnet> 40 + 2
+=> 42
+garnet>garnet> 99
+=> 99
+garnet>garnet> 99garnet>garnet> 99
+=> 99
+garnet>garnet(reverse-search: )garnet> 40 + 2garnet> 40 + 2
+=> 42
+garnet>garnet> 1garnet> 1 +
+garnet>garnet> 2garnet> 2 + 3
+=> 5
+garnet>
+garnet> def add(a, b) {
+   ...>garnet> def add(a, b) {
+   ...>   agarnet> def add(a, b) {
+   ...>   a +
+garnet> def add(a, b) {
+   ...>   a + b
+   ...>garnet> def add(a, b) {
+   ...>   a + b
+   ...> }garnet> def add(a, b) {
+   ...>   a + b
+   ...> }
+ok
+garnet>garnet> addgarnet> add(2, 5)
+=> 7
+garnet>

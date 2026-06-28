@@ -1,0 +1,179 @@
+{
+  "schema": "garnet.validation.rb7_winpty/1",
+  "host": "Windows",
+  "pty": "winpty",
+  "repo": "C:\\Users\\IslandDevCrew\\Desktop\\Garnet Opus 4.7 final\\garnet",
+  "binary": "C:\\Users\\IslandDevCrew\\Desktop\\Garnet Opus 4.7 final\\garnet\\target\\debug\\garnet.exe",
+  "exitstatus": 0,
+  "actions": [
+    {
+      "label": "help",
+      "sent_repr": "':help\\r'",
+      "delay_s": 0.5
+    },
+    {
+      "label": "doc primitive",
+      "sent_repr": "'?doc read_file\\r'",
+      "delay_s": 0.5
+    },
+    {
+      "label": "dangling caps annotation",
+      "sent_repr": "'@caps(net)\\r'",
+      "delay_s": 0.4
+    },
+    {
+      "label": "complete annotated function",
+      "sent_repr": "'def fetch() { 1 }\\r'",
+      "delay_s": 0.5
+    },
+    {
+      "label": "caps overview",
+      "sent_repr": "':caps\\r'",
+      "delay_s": 0.6
+    },
+    {
+      "label": "define binding one",
+      "sent_repr": "'def myhelper() { 7 }\\r'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "define binding two",
+      "sent_repr": "'def myhero() { 8 }\\r'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "command completion menu",
+      "sent_repr": "':\\t'",
+      "delay_s": 0.6
+    },
+    {
+      "label": "ctrl-c after command menu",
+      "sent_repr": "'\\x03'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "primitive completion menu",
+      "sent_repr": "'read_\\t'",
+      "delay_s": 0.6
+    },
+    {
+      "label": "ctrl-c after primitive menu",
+      "sent_repr": "'\\x03'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "binding completion menu",
+      "sent_repr": "'myh\\t'",
+      "delay_s": 0.6
+    },
+    {
+      "label": "ctrl-c after binding menu",
+      "sent_repr": "'\\x03'",
+      "delay_s": 0.5
+    },
+    {
+      "label": "history seed expression",
+      "sent_repr": "'40 + 2\\r'",
+      "delay_s": 0.45
+    },
+    {
+      "label": "history up/down/up/enter",
+      "sent_repr": "'\\x1b[A\\x1b[B\\x1b[A\\r'",
+      "delay_s": 0.6
+    },
+    {
+      "label": "history down visibility seed",
+      "sent_repr": "'99\\r'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "history up visible",
+      "sent_repr": "'\\x1b[A'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "history down clears prompt",
+      "sent_repr": "'\\x1b[B'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "history up enter",
+      "sent_repr": "'\\x1b[A\\r'",
+      "delay_s": 0.45
+    },
+    {
+      "label": "reverse search start",
+      "sent_repr": "'\\x12'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "reverse search term",
+      "sent_repr": "'40\\r'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "reverse search execute",
+      "sent_repr": "'\\r'",
+      "delay_s": 0.45
+    },
+    {
+      "label": "partial line before ctrl-c",
+      "sent_repr": "'1 +'",
+      "delay_s": 0.25
+    },
+    {
+      "label": "ctrl-c abandon partial",
+      "sent_repr": "'\\x03'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "post-ctrl-c expression",
+      "sent_repr": "'2 + 3\\r'",
+      "delay_s": 0.45
+    },
+    {
+      "label": "brace multiline start",
+      "sent_repr": "'def add(a, b) {\\r'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "brace multiline body",
+      "sent_repr": "'  a + b\\r'",
+      "delay_s": 0.35
+    },
+    {
+      "label": "brace multiline close",
+      "sent_repr": "'}\\r'",
+      "delay_s": 0.45
+    },
+    {
+      "label": "call multiline function",
+      "sent_repr": "'add(2, 5)\\r'",
+      "delay_s": 0.45
+    },
+    {
+      "label": "ctrl-d eof",
+      "sent_repr": "'\\x04'",
+      "delay_s": 0.5
+    }
+  ],
+  "checks": {
+    "banner": true,
+    "help": true,
+    "doc_read_file": true,
+    "unicode_middle_dot": true,
+    "dangling_caps_multiline": true,
+    "caps_not_budget": true,
+    "command_completion": true,
+    "primitive_completion": true,
+    "binding_completion": true,
+    "history_recall": true,
+    "reverse_search": true,
+    "ctrl_c_abandon_clean": true,
+    "brace_multiline": true,
+    "ctrl_d_exit": true
+  },
+  "reader_errors": [
+    "EOFError: Pty is closed"
+  ]
+}

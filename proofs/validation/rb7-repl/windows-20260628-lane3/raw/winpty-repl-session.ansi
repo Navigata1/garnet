@@ -1,0 +1,257 @@
+[?9001h[?1004h[?25l[2J[m[HGarnet REPL — RB-7. :help for commands, :quit to exit.
+]0;C:\Users\IslandDevCrew\Desktop\Garnet Opus 4.7 final\garnet\target\debug\garnet.exe[?25h[?25lgarnet>[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[2;9H[?25h[?25lgarnet> [37m:[K[m
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[2;10H[?25h[?25lgarnet> [37m:help[K[m
+REPL commands:[K
+  <expr>            evaluate and print a value[K
+  def name(..) {..} register a top-level item (def/struct/enum/impl/...)[K
+  ?doc <name>       show a primitive's doc, arity, and required caps[K
+  ?<name>           shorthand for ?doc <name>[K
+  :caps             show the session's declared + available authority[K
+  :help  :h         this help[K
+  :quit  :q         leave the REPL  (Ctrl-D also exits)[K
+[K
+Editing: history (Up/Down), multiline (open `{`/`(`/`[` continues the[K
+input), and Tab completion over commands, primitives, and live bindings.[K
+garnet>[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[14;9H[?25h[?25lgarnet> [37m?[K[m
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[14;10H[?25h[?25lgarnet> [37m?doc read_file[K[m
+fs::read_file  (1-arg primitive)[K
+  caps: fs[K
+  layer: Std · stability: Stable[K
+  Read a UTF-8 file as String.[K
+garnet>[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[19;9H[?25h[?25lgarnet> [37m@[K[m
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[19;10H[?25h[?25lgarnet> [37m@caps(net)[K[94m
+   ...>[K[m
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[20;9H[?25h[?25l[19;1Hgarnet> [37m@caps(net)[K[94m
+   ...> [37mdef fetch() { 1 }[K[m
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[20;26H[?25h[?25l
+ok
+garnet>[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[22;9H[?25h[?25lgarnet> [37m:[K[m
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K[22;10H[?25hgarnet> [37m:caps[K[m
+capability surface (declared + available — NOT an enforced budget;[K
+@caps is enforced per-function at entry, S90):[K
+[K
+  session-declared (by loaded @caps functions):[K
+    net: fetch[K
+[K
+  available primitives by capability:[K
+    env: std::env::get, std::env::set, std::env::vars[K
+    fs: fs::list_dir, fs::read_bytes, fs::read_file, fs::write_bytes, fs::write_file, std::log::to_file[K
+    net: net::tcp_connect, net::tcp_listen, net::udp_bind
+    proc: std::process::exit_code, std::process::output, std::process::spawn, std::process::spawn_ar
+[31;100Hrgs, std::process::wait[?25l
+    time: std::uuid::new_v4, std::uuid::new_v7, time::now_ms, time::sleep, time::wall_clock_ms      [32;95H[?25h
+garnet>[1Cgarnet> [37mdef myhelper() { 7 }[K[m
+ok
+garnet>[1Cgarnet> [37mdef myhero() { 8 }[K[m
+ok
+garnet>[1Cgarnet> [37m:[K[m[?25l
+[100C
+[100C
+[29;1Hgarnet| [37m:                                                                                           [32m[1m[4m[7m
+:[24mcaps  [33mcommand[m                                                                                      [90m[4m
+:[24mhelp  [33mcommand                                                                                      [90m[4m
+:[24mquit  [33mcommand[K[29;10H[?25h[m
+[?25lgarnet>[K
+[K
+[K[30;9H[?25h[?25lgarnet> [37mread[K[m
+[K
+[K[30;13H[?25h[?25lgarnet| [37mread_[K[32m[1m[4m[7m
+read_[24mbytes  [33mprimitive[m[K[90m[4m
+read_[24mfile   [33mprimitive[K[30;14H[?25h[m
+[?25lgarnet>[K
+[K[31;9H[?25h[?25l
+
+[30;1Hgarnet| [37mmyh                                                                                         [32m[1m[4m[7m
+myh[24melper  [33mbinding[m                                                                                   [90m[4m
+myh[24mero    [33mbinding[K[30;12H[?25h[m
+[?25lgarnet>[K
+[K[31;9H[?25h[?25lgarnet> [37m40[K[m
+[K[31;12H[?25hgarnet> [37m40 + 2[K[m
+=> 42[K
+garnet>[1Cgarnet> [37m40 + 2[K[m
+=> 42
+garnet>[1Cgarnet> [37m99[K[m
+=> 99
+garnet>[1Cgarnet> [37m99[K[mgarnet>[K[1Cgarnet> [37m99[K[m
+=> 99
+garnet>[1Cgarnet(reverse-search: )[K[1Cgarnet> [37m40 + 2[K[mgarnet> [37m40 + 2[K[m
+=> 42
+garnet>[1Cgarnet> [37m1[K[1C[mgarnet> [37m1 +[K[m
+garnet>[K[1Cgarnet> [37m2[K[1C[mgarnet> [37m2 + 3[K[m
+=> 5
+garnet>[1C[?25l
+[31;1Hgarnet> [37mdef add(a, b) {                                                                             [94m
+   ...>[1C[?25h[m[?25l[31;1Hgarnet> [37mdef add(a, b) {[K[94m
+   ...>   [37ma[K[1C[?25h[?25l[m[31;1Hgarnet> [37mdef add(a, b) {[K[94m
+   ...>   [37ma +[K[87C[m
+[30;1Hgarnet> [37mdef add(a, b) {                                                                             [94m
+   ...>   [37ma + b                                                                                     [94m
+   ...>[1C[?25h[?25l[m[30;1Hgarnet> [37mdef add(a, b) {[K[94m
+   ...>   [37ma + b[K[94m
+   ...> [37m}[K[?25h[?25l[m[30;1Hgarnet> [37mdef add(a, b) {[K[94m
+   ...>   [37ma + b[K[94m
+   ...> [37m}[K[?25h[m
+ok
+garnet>[1Cgarnet> [37madd[K[mgarnet> [37madd(2, 5)[K[m
+=> 7
+garnet>[1C[K

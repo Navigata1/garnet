@@ -1,0 +1,10 @@
+:help
+1 + 2 * 3
+[1, 2, 3]
+@caps(fs,net)
+def fetch_and_save(path) { path }
+?doc read_file
+?doc time::now_ms
+?doc fetch_and_save
+:caps
+:quit
