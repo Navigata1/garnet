@@ -1,0 +1,71 @@
+{
+  "schema": "garnet.validation.mobile_overflow/v1",
+  "captured_at_utc": "2026-06-28T07:07:45.711Z",
+  "overflow": {
+    "docRight": 644,
+    "horizontalOverflow": true,
+    "offenders": [
+      {
+        "className": "pane",
+        "id": "",
+        "left": 45,
+        "overflowRight": 269,
+        "right": 644,
+        "tag": "div",
+        "text": "Source# hello.garnet — the canonical Garnet hello-world. # # `@caps()` declares the program needs no OS authority (pure compute + stdout). # # Run: garnet run e",
+        "width": 599
+      },
+      {
+        "className": "",
+        "id": "",
+        "left": 45,
+        "overflowRight": 269,
+        "right": 644,
+        "tag": "h3",
+        "text": "Source",
+        "width": 599
+      },
+      {
+        "className": "",
+        "id": "source",
+        "left": 45,
+        "overflowRight": 269,
+        "right": 644,
+        "tag": "pre",
+        "text": "# hello.garnet — the canonical Garnet hello-world. # # `@caps()` declares the program needs no OS authority (pure compute + stdout). # # Run: garnet run example",
+        "width": 599
+      },
+      {
+        "className": "pane",
+        "id": "",
+        "left": 45,
+        "overflowRight": 269,
+        "right": 644,
+        "tag": "div",
+        "text": "Recorded outputHello from Garnet! => 0",
+        "width": 599
+      },
+      {
+        "className": "",
+        "id": "",
+        "left": 45,
+        "overflowRight": 269,
+        "right": 644,
+        "tag": "h3",
+        "text": "Recorded output",
+        "width": 599
+      },
+      {
+        "className": "out",
+        "id": "output",
+        "left": 45,
+        "overflowRight": 269,
+        "right": 644,
+        "tag": "pre",
+        "text": "Hello from Garnet! => 0",
+        "width": 599
+      }
+    ],
+    "viewport": 375
+  }
+}

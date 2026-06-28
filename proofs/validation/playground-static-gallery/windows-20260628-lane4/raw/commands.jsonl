@@ -1,0 +1,6 @@
+﻿{
+    "command":  "python scripts\\garnet_playground_readiness.py --gate --format json",
+    "exit_code":  0,
+    "captured_at":  "2026-06-28T07:07:34.2771419Z",
+    "stdout":  "{\n  \"schema\": \"garnet.playground_readiness/v1\",\n  \"page_present\": true,\n  \"manifest_present\": true,\n  \"example_count\": 3,\n  \"examples_well_formed\": true,\n  \"page_references_manifest\": true,\n  \"honesty_markers_present\": true,\n  \"missing_markers\": [],\n  \"ok\": true\n}"
+}
