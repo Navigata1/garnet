@@ -242,7 +242,7 @@ deferrals (Docker, clean-Linux) were re-attempted to completion; the clean-Linux
 | **Clean-Linux CLI install** | DEFERRED (no hypervisor; WSL=portability-only) | **✅ PROVEN** — see below |
 | **Docker image build** | DEFERRED (daemon down) | **❌ BLOCKED on this box** — Docker Desktop engine non-functional (diagnosed) |
 | **Automated clean-VM (Sandbox)** | DEFERRED (2 attempts, no write-back) | **❌ confirmed non-functional** — 3rd controlled failure |
-| **Windows clean-VM GUI proof** | → Codex computer-use lane | unchanged — computer-use access approval **timed out (300s, no operator)** |
+| **Windows clean-VM GUI proof** | → Codex computer-use lane | **✅ PROVEN (operator-driven)** — installer run in a fresh Sandbox; Studio launched + captured |
 
 ### ✅ Clean-Linux distribution proof — released `.deb` installs + runs on a fresh toolchain-free Debian
 Docker Desktop's engine would not start on this box (see below), so the clean-environment Linux
@@ -276,15 +276,35 @@ A minimal diagnostic `.wsb` (writable mapped folder + a `LogonCommand` that writ
 0 confirmed → fresh launch → 2 procs confirmed). After 115 s, **no heartbeat propagated to the host**
 — matching the two Checkpoint-6 failures. Conclusion: Windows Sandbox `LogonCommand`/mapped
 write-back is non-functional on this machine; the automated-evidence-egress path is a dead end here.
-The remaining clean-VM **GUI** proof needs computer-use to drive the Sandbox window directly, and the
-`request_access` approval **timed out at 300 s** (no operator at the console) — so it stays for the
-Codex computer-use lane or a user-present session. Installer remains pinned
+The remaining clean-VM **GUI** proof was therefore completed **operator-driven** (next section).
+Installer remains pinned
 (`07585423B286EE85105187E9573D994973F9F4BE2022B3B04867996C7352A17C`); host `--studio-smoke` green.
 
-**Net Checkpoint 7:** WV-5's **Linux clean-environment install is now PROVEN** on the genuine
-released binary; the **Windows clean-VM GUI** proof is the single honest remaining gap, with a sharp
-root-cause (Sandbox write-back dead + no operator for computer-use), not a hand-wave. No frozen
-crate, gate, CI, signing, registry, or release asset was touched.
+### ✅ Windows clean-VM GUI proof — CAPTURED (operator-driven install + agent raw-capture)
+With Jon at the console (2026-06-28 ~02:49), the released installer was run inside a **fresh Windows
+Sandbox** (pristine ephemeral Windows VM, installer mapped read-only; no toolchain). Two findings made
+this **operator-driven rather than agent-driven**: (1) the Sandbox display surface is owned by
+`WindowsSandboxRemoteSession.exe`, which the **computer-use grant resolver does not recognize** — so
+the computer-use *screenshot masks it and clicks into it are blocked*; (2) `LogonCommand` does not run
+on this box (write-back **and** shared-clipboard egress both failed). So Jon performed the ~5 installer
+clicks; the agent captured the result with a host-side PowerShell `CopyFromScreen` — which is **not**
+subject to the computer-use masking.
+- **Result:** `Garnet Studio_0.8.1_x64-setup.exe` (pinned `07585423…`) installed (current-user, no
+  UAC) and **Garnet Studio launched + rendered its full overhauled shell** in the Sandbox — title bar
+  `Windows Sandbox`; nav CLI Health / Parse·Check·Run / Active Conversion / Settings; Simple-mode
+  header; Safety-contract footer; `Host — windows / x86_64`.
+- **Clean-VM corroboration:** the Studio health panel reports `Garnet CLI / Repository / Python — Not
+  found` and a dogfood path under `C:\Users\WDAGUtilityAccount\…` (the Sandbox's own account) —
+  independent confirmation it is the pristine VM, not the host.
+- **Scope (honest):** proves *installer installs + app launches + UI renders on a clean Windows VM*,
+  captured as a screenshot; **operator-attested for the clicks**, agent-captured for the evidence. Not
+  a full CLI round-trip (the VM has no CLI by design). Evidence:
+  `dist-staging-20260611/sandbox-wv5/out/wv5-cleanvm-studio-crop.png` (+ `…-20260628-024938.png`).
+
+**Net Checkpoint 7:** WV-5's **Linux clean-environment install** (fresh Debian 13) **and Windows
+clean-VM GUI install** (fresh Sandbox) are **both now PROVEN** on the genuine released artifacts.
+Docker Desktop remains non-functional on this box (its clean-container intent is covered by the WSL
+Debian proof). No frozen crate, gate, CI, signing, registry, or release asset was touched.
 
 ## Claim boundaries
 Proves: WV-1/WV-2/WV-3 traps hold on Windows; the new tier (PR-4/#413/#414/#415), #417's gate, and #421's
