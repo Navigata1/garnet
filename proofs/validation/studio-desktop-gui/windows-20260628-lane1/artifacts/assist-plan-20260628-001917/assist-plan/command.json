@@ -1,0 +1,15 @@
+{
+  "command": [
+    "python",
+    "C:\\Users\\IslandDevCrew\\Desktop\\Garnet Opus 4.7 final\\garnet\\scripts\\garnet_converter_assist_plan.py",
+    "--language",
+    "typescript",
+    "--source",
+    "C:\\Users\\IslandDevCrew\\Desktop\\Garnet Opus 4.7 final\\garnet\\apps\\garnet-studio\\src\\main.ts",
+    "--output-dir",
+    "C:\\Users\\IslandDevCrew\\Desktop\\dogfood\\garnet-studio-windows-linux\\garnet-studio-windows-linux-assist-plan-20260628-001917"
+  ],
+  "exit_code": 0,
+  "provider_api_called": false,
+  "source_included": false
+}

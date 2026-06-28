@@ -1,0 +1,120 @@
+{
+  "source": "C:\\Users\\IslandDevCrew\\Desktop\\Garnet Opus 4.7 final\\garnet",
+  "language": "TypeScript",
+  "language_id": "typescript",
+  "language_status": "planned",
+  "status": "active-assist-plan",
+  "provider_required": false,
+  "model_required": false,
+  "network_required": false,
+  "enabled_by_default": false,
+  "conversion_active": false,
+  "deterministic_converter_available": false,
+  "source_execution_allowed": false,
+  "sandbox_default": true,
+  "current_truth": [
+    "not active conversion today",
+    "source code is not executed during analysis",
+    "deterministic converter output remains authoritative",
+    "provider-backed assist remains a future gated lane",
+    "this planned language has no deterministic frontend yet; this plan is advisory migration evidence only"
+  ],
+  "source_summary": {
+    "path": "C:\\Users\\IslandDevCrew\\Desktop\\Garnet Opus 4.7 final\\garnet\\apps\\garnet-studio\\src\\main.ts",
+    "bytes": 28318,
+    "lines": 859,
+    "sha256": "8e9065663d801f9dd0838a2fbafa461f449b51d9e7cd0ec83e8b2dd3d8bac215"
+  },
+  "context_documents": [
+    {
+      "path": "CURRENT_STATE.md",
+      "role": "current-truth",
+      "exists": true,
+      "bytes": 116371,
+      "sha256": "ee9e4cdcbb8a5f6fbe17a00acc6d18d1cf5a46ac6c70275796325c6ea46bbb6d"
+    },
+    {
+      "path": "README.md",
+      "role": "public-entry",
+      "exists": true,
+      "bytes": 7913,
+      "sha256": "14a5b5bc3017d16ee9fafed4a6829b01259786edf43707c12355c2bd28a5325d"
+    },
+    {
+      "path": "C_Language_Specification/GARNET_v1_0_Mini_Spec.md",
+      "role": "spec",
+      "exists": true,
+      "bytes": 91639,
+      "sha256": "7a7b38fd00ec2622404edb278dc3c25182c4a89e312616a1ec444e10dc84ef48"
+    },
+    {
+      "path": "C_Language_Specification/GARNET_v0_4_2_Conformance_Matrix.md",
+      "role": "conformance",
+      "exists": true,
+      "bytes": 30878,
+      "sha256": "6b964c36a8004d3150d9f5b5342960ece579d27da73588ab8ee37742988e79a0"
+    },
+    {
+      "path": "F_Project_Management/DOGFOOD/GARNET_v0_5_DOGFOOD_READINESS_PHASE_LOG.md",
+      "role": "dogfood",
+      "exists": true,
+      "bytes": 84081,
+      "sha256": "64554a69a6a3376cb2b7443c3354de710c69c896d09f4e125e00abd08b559417"
+    }
+  ],
+  "analysis_targets": [
+    "safe-mode ownership candidates",
+    "memory declarations",
+    "CapCaps/capability boundaries",
+    "actor/orchestration mappings",
+    "migration risk inventory"
+  ],
+  "required_gates": [
+    "lineage per emitted node",
+    "@sandbox default",
+    "migrate_todo evidence",
+    "garnet check",
+    "dogfood readiness bundle",
+    "human audit before unquarantine"
+  ],
+  "risk_inventory": [
+    {
+      "title": "actor or async orchestration mapping",
+      "analysis_target": "actor/orchestration mappings",
+      "evidence": [
+        "async",
+        "await",
+        "promise"
+      ],
+      "recommendation": "Map concurrent control flow to Garnet orchestration constructs before emitting runnable code."
+    },
+    {
+      "title": "network or external capability boundary",
+      "analysis_target": "CapCaps/capability boundaries",
+      "evidence": [
+        "file",
+        "exec"
+      ],
+      "recommendation": "Declare capability boundaries and keep external effects behind explicit CapCaps."
+    },
+    {
+      "title": "type and ownership modeling",
+      "analysis_target": "safe-mode ownership candidates",
+      "evidence": [
+        "class",
+        "interface",
+        "record"
+      ],
+      "recommendation": "Inventory type shapes before choosing managed-mode or safe-mode ownership boundaries."
+    }
+  ],
+  "next_steps": [
+    "Treat TypeScript as planned-only until a deterministic frontend, corpus tests, and CI gates land.",
+    "Keep any future emitted Garnet output @sandbox by default.",
+    "Preserve lineage per emitted node before treating output as conversion evidence.",
+    "Emit migrate_todo evidence for unsupported constructs.",
+    "Run `garnet check` before claiming translated source is valid.",
+    "Preserve a dogfood readiness bundle for the attempted migration.",
+    "Require human audit before unquarantine."
+  ]
+}

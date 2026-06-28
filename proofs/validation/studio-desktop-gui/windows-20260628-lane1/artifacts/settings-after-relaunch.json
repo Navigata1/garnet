@@ -1,0 +1,6 @@
+{
+  "mode": "power",
+  "theme": "dark",
+  "command_timeout_secs": 900,
+  "matrix_timeout_secs": 5400
+}
