@@ -216,6 +216,21 @@ built Vite `dist` in headless Chromium and asserts the overhaul's UI structure +
 - **PENDING:** the fork→IDC squash-merge needs the work-profile browser selection (asked; awaiting). The
   desktop-shell drive (tauri-driver: Run→CommandResult, evidence bundle, persisted toggle) is the flagged
   WV-4 follow-up — the Codex computer-use lane is the rigorous path for it.
+  **UPDATE:** #422 was MERGED (squash, `952b3be`) — the WV-4 harness is on `origin/main`. Phase 2 complete.
+
+## Checkpoint 6 — loop Phase 3: WV-5 distribution happy-path (evidence + honest deferrals)
+| Item | Result |
+|---|---|
+| NSIS installer (0.8.1) | **Built + pinned** — `Garnet Studio_0.8.1_x64-setup.exe`, SHA256 `07585423B286EE85105187E9573D994973F9F4BE2022B3B04867996C7352A17C` |
+| Host `--studio-smoke` | **✅ green** (exit 0, `status=passed`, `app_version=0.8.1`) — proven earlier this session on `NUCBOX_M2PRO_S` |
+| winget manifest | **Validated 2026-06-11** (`winget validate` → "succeeded", BOM-free); content unchanged on fork `aux/2026-06-11-windows-nuc-claude-distribution`. Today's re-validate hit git-ref/extraction friction (the `aux/`-named branch + a PS-injected BOM), not a manifest defect. |
+| Automated clean-VM install (Windows Sandbox) | **Attempted twice, DEFERRED.** A `.wsb` with a `LogonCommand` that silent-installs (`/S`) → launches `--studio-smoke` → seals the bundle to a writable mapped folder produced **no host-visible output** on either run (even a heartbeat written to the mapped root before the install never propagated). This is the well-known Windows Sandbox `LogonCommand`/mapped-write-back fragility on this box — **not** an installer defect. The rigorous clean-VM + GUI proof is **deferred to the Codex computer-use lane** (which drives the Sandbox GUI directly rather than via `LogonCommand` automation — exactly the lane scoped in `GARNET_CODEX_VALIDATION_GOALMODE`). |
+| Docker image build | **DEFERRED — daemon DOWN.** The checksum-pinned Dockerfile (pins the released `.deb` by its official SHA256) is ready on the `aux` branch; the build is a quick follow-up once Docker Desktop is running. Container output would be Linux-userspace **portability** only. |
+| Clean-Linux CLI / Linux-desktop-GUI | **DEFERRED** — no Linux hypervisor on this box (only Windows Sandbox, Windows-only); WSL = portability-only. |
+
+**Net WV-5:** the installer is real + pinned and the app's smoke runs green; live channel installs and the
+clean-VM/GUI/Docker/Linux proofs are honestly deferred to their right tools (Codex computer-use; a running
+Docker daemon; a hypervisor) rather than faked. No registry submission, no signing, no asset mutation.
 
 ## Claim boundaries
 Proves: WV-1/WV-2/WV-3 traps hold on Windows; the new tier (PR-4/#413/#414/#415), #417's gate, and #421's
