@@ -232,6 +232,60 @@ built Vite `dist` in headless Chromium and asserts the overhaul's UI structure +
 clean-VM/GUI/Docker/Linux proofs are honestly deferred to their right tools (Codex computer-use; a running
 Docker daemon; a hypervisor) rather than faked. No registry submission, no signing, no asset mutation.
 
+## Checkpoint 7 — loop Phase 3 RESUMED ("proceed with phase 3") — clean-Linux install proof LANDED; Docker/Sandbox diagnosed
+**Stamp:** `NUCBOX_M2PRO_S / Windows 10.0.26200 / 2026-06-28`, against `origin/main` @ **`2e2fe84`**
+(#423 docs-only since Checkpoint 6's `952b3be` — no Windows trap to verify). The two Checkpoint-6
+deferrals (Docker, clean-Linux) were re-attempted to completion; the clean-Linux proof now PASSES.
+
+| Item | Checkpoint 6 | Checkpoint 7 (resumed) |
+|---|---|---|
+| **Clean-Linux CLI install** | DEFERRED (no hypervisor; WSL=portability-only) | **✅ PROVEN** — see below |
+| **Docker image build** | DEFERRED (daemon down) | **❌ BLOCKED on this box** — Docker Desktop engine non-functional (diagnosed) |
+| **Automated clean-VM (Sandbox)** | DEFERRED (2 attempts, no write-back) | **❌ confirmed non-functional** — 3rd controlled failure |
+| **Windows clean-VM GUI proof** | → Codex computer-use lane | unchanged — computer-use access approval **timed out (300s, no operator)** |
+
+### ✅ Clean-Linux distribution proof — released `.deb` installs + runs on a fresh toolchain-free Debian
+Docker Desktop's engine would not start on this box (see below), so the clean-environment Linux
+install was proven on an **equivalent headless vehicle**: a freshly-imported `wsl --install Debian
+--no-launch` distro (**Debian 13 trixie**, WSL2 kernel `6.6.87.2-microsoft-standard-WSL2`), run as
+root. Same proof content as the checksum-pinned Dockerfile.
+
+- **Distro confirmed clean pre-install:** `garnet`, `rustc`, `cargo` all **ABSENT**.
+- **Released artifact, hash-verified twice:** host `Get-FileHash` and in-distro `sha256sum -c`
+  both `ca35ebf881cc1d16f288f850eb767305c590112a05966c6778e5fa3d2a42e0cc` == the release pin.
+- **Install:** `dpkg -i /tmp/garnet.deb` → `Setting up garnet (0.8.1-1)` with **zero extra deps**
+  (proves the binary is self-contained on a stock Debian).
+- **Smoke:** `garnet --version` → **exit 0**, full banner (`garnet 0.8.1`; parser/interp/vm/check/
+  memory/actor-rt/stdlib/convert all reported). `dpkg -l garnet` → `ii  garnet  0.8.1-1  amd64`.
+- **Scope (honest):** clean-LINUX-USERLAND proof on the **shared WSL2 kernel** — the same kernel
+  caveat a Docker container carries. NOT a separate-kernel VM, NOT Windows, NOT a GUI, NOT
+  OS-sandbox enforcement. Evidence: `dist-staging-20260611/debian-wv5/proof-output.txt`.
+
+### ❌ Docker — engine non-functional on this box (diagnosed, not just "down")
+Docker Desktop launches (`com.docker.backend` procs appear) then **exits within ~1 min without
+starting the Linux engine**; the `docker-desktop` WSL2 distro stays `Stopped` and the
+`npipe:////./pipe/dockerDesktopLinuxEngine` pipe never appears. Survived `wsl --shutdown` +
+`DockerCli -SwitchLinuxEngine` + restart + a 6-min poll. This needs interactive GUI repair (which
+needs the computer-use grant that timed out). The pinned Dockerfile is staged at
+`dist-staging-20260611/docker-wv5/Dockerfile`; its **intent (clean-container `.deb` install) is now
+satisfied by the WSL Debian proof above**, which is arguably stronger (real distro, zero-dep install).
+
+### ❌ Sandbox automated clean-VM — write-back definitively broken here (3rd controlled failure)
+A minimal diagnostic `.wsb` (writable mapped folder + a `LogonCommand` that writes only a heartbeat
++ `dir` listing) was launched against a **verified-fresh** Sandbox (all prior Sandbox procs killed →
+0 confirmed → fresh launch → 2 procs confirmed). After 115 s, **no heartbeat propagated to the host**
+— matching the two Checkpoint-6 failures. Conclusion: Windows Sandbox `LogonCommand`/mapped
+write-back is non-functional on this machine; the automated-evidence-egress path is a dead end here.
+The remaining clean-VM **GUI** proof needs computer-use to drive the Sandbox window directly, and the
+`request_access` approval **timed out at 300 s** (no operator at the console) — so it stays for the
+Codex computer-use lane or a user-present session. Installer remains pinned
+(`07585423B286EE85105187E9573D994973F9F4BE2022B3B04867996C7352A17C`); host `--studio-smoke` green.
+
+**Net Checkpoint 7:** WV-5's **Linux clean-environment install is now PROVEN** on the genuine
+released binary; the **Windows clean-VM GUI** proof is the single honest remaining gap, with a sharp
+root-cause (Sandbox write-back dead + no operator for computer-use), not a hand-wave. No frozen
+crate, gate, CI, signing, registry, or release asset was touched.
+
 ## Claim boundaries
 Proves: WV-1/WV-2/WV-3 traps hold on Windows; the new tier (PR-4/#413/#414/#415), #417's gate, and #421's
 deny-by-default caps mediation behave correctly on Windows; Finding B closed and re-verified; WV-4 shell smoke +
