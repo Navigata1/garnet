@@ -41,6 +41,14 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
+// Video and audio stream from the network and are never written to cache storage:
+// a <video> fetches in ranges, and a whole 5 MB file is not an offline asset.
+const MEDIA_PATH = /\.(mp4|webm|m4v|mov|mp3|ogg|wav)(\?|#|$)/i;
+function isMedia(request) {
+  const destination = request.destination || "";
+  return destination === "video" || destination === "audio" || MEDIA_PATH.test(String(request.url || ""));
+}
+
 self.addEventListener("fetch", (event) => {
   const request = event.request;
 
@@ -48,8 +56,10 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          if (!isMedia(request)) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          }
           return response;
         })
         .catch(() => caches.match(request).then((hit) => hit || caches.match("index.html")))
@@ -63,9 +73,9 @@ self.addEventListener("fetch", (event) => {
         return hit;
       }
       return fetch(request).then((response) => {
-        // A video is fetched in ranges; a 206 cannot be cached, and a 5 MB file should not be.
+        // A 206 is a partial body and cannot be cached.
         const ranged = Boolean(request.headers && request.headers.has && request.headers.has("range"));
-        if (request.method === "GET" && response.ok && response.status !== 206 && !ranged) {
+        if (request.method === "GET" && response.ok && response.status !== 206 && !ranged && !isMedia(request)) {
           const copy = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
         }

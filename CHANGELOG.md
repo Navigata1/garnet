@@ -16,9 +16,28 @@
   `C_Language_Specification/GARNET_CAPABILITY_ENFORCEMENT_SCOPE.md` (U-91):
   the check-time claim, the mode-boundary bridge, the crossing log, FFI and
   UDP, and what `garnet verify` checks.
-- **Fixed:** content below the hero was invisible without JavaScript; phones
-  had no navigation; a 390 px viewport overflowed; heading accents fell below
-  WCAG contrast. The footer carries the real IDC mark (#565), right-sized.
+- **Also in #566:** the restored page's own defects were fixed before it
+  landed: content below the hero stayed invisible without JavaScript, phones
+  had no navigation, a 390 px viewport overflowed, and heading accents fell
+  below WCAG contrast. The footer carries the IDC mark (the asset proposed in
+  #565), right-sized.
+- **Fixed (round two):** the Convert section no longer calls converted output
+  "sandboxed" — `@sandbox` is a quarantine marker nothing executes as a
+  boundary; the call-site count is described as a tally, not a crossing
+  analysis; muted text reaches 4.6:1; scripted scrolling honours reduced
+  motion; both tab groups expose tab roles, state and arrow-key navigation; the
+  silent recording has a text version; `omarchy.html` carries the IDC mark.
+- **Fixed (round two):** the hot-reload card named a `reload_signed` API that
+  does not exist; `Address::reload` takes no signature, and the Ed25519
+  reload-authorisation module is not yet wired into it. The card says so. The
+  service worker no longer writes any video or audio to cache storage.
+- **Record:** the take-03 recording was published by the merge of #566
+  (2026-09-10), whose description stated that approving it was the
+  publication decision. Its opening and closing cards still carry the
+  capture's pre-publication *unpublished · hold* stamp. #566's squash message
+  still says the clip is "of the source CLI", that the page is 84 KB and that
+  390 px does not overflow; all three were corrected before merge (the check
+  act runs in the browser playground; the page is 92 KB).
 - **Scope:** docs, service worker and ledger only; no shipped-binary behavior
   change; no gate file and no trust-kernel path.
 
