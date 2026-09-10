@@ -22,15 +22,16 @@
   below WCAG contrast. The footer carries the IDC mark (the asset proposed in
   #565), right-sized.
 - **Fixed (round two):** the Convert section no longer calls converted output
-  "sandboxed" — `@sandbox` is a quarantine marker nothing executes as a
-  boundary; the call-site count is described as a tally, not a crossing
+  "sandboxed": its `@sandbox` and `@caps()` markers are not enforced, and as
+  emitted today the output does not pass `garnet check`; the call-site count is described as a tally, not a crossing
   analysis; muted text reaches 4.6:1; scripted scrolling honours reduced
   motion; both tab groups expose tab roles, state and arrow-key navigation; the
   silent recording has a text version; `omarchy.html` carries the IDC mark.
 - **Fixed (round two):** the hot-reload card named a `reload_signed` API that
-  does not exist; `Address::reload` takes no signature, and the Ed25519
+  does not exist; `ActorAddress::reload` takes no signature, and the Ed25519
   reload-authorisation module is not yet wired into it. The card says so. The
-  service worker no longer writes any video or audio to cache storage.
+  service worker lets video and audio bypass it entirely, and its cache moves
+  to `garnet-web-v5`, so a whole file cached under v4 is dropped.
 - **Record:** the take-03 recording was published by the merge of #566
   (2026-09-10), whose description stated that approving it was the
   publication decision. Its opening and closing cards still carry the

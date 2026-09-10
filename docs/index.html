@@ -1227,7 +1227,7 @@ def main() {
       <div class="feature">
         <div class="icon">reload</div>
         <h4>Actor Hot Reload</h4>
-        <p><code>Address::reload</code> swaps an actor's behaviour in place, refuses a downgrade unless asked, and replays the messages buffered during the swap. An Ed25519 reload-authorisation module and BLAKE3 state fingerprints ship in the actor runtime; checking a signature is not yet wired into the reload path.</p>
+        <p><code>ActorAddress::reload</code> swaps an actor's behaviour in place, refuses a downgrade unless asked, and replays the messages buffered during the swap. An Ed25519 reload-authorisation module and BLAKE3 state fingerprints ship in the actor runtime; checking a signature is not yet wired into the reload path.</p>
       </div>
       <div class="feature">
         <div class="icon">--sign</div>
@@ -1325,7 +1325,7 @@ def main() {
   <div class="container reveal">
     <h3>Migrate at Your Pace</h3>
     <h2>Convert <span class="accent">Rust · Ruby · Python · Go</span> source to Garnet.</h2>
-    <p class="lead">The <code>garnet convert</code> tool is a migration assistant, not a full transpiler: it reads four deterministic source lanes and emits Garnet tagged <code>@sandbox</code> and <code>@caps()</code>, with lineage, metrics, and a human migration checklist. <code>@sandbox</code> is a quarantine marker a reviewer lifts after audit, not an execution boundary: nothing in <code>garnet run</code> enforces it. <code>@caps()</code> is an empty declared budget that <code>garnet check</code> holds the converted code to.</p>
+    <p class="lead">The <code>garnet convert</code> tool is a migration assistant, not a full transpiler: it reads four deterministic source lanes and emits Garnet tagged <code>@sandbox</code> and <code>@caps()</code>, with lineage, metrics, and a human migration checklist. Those two lines are notes for the reviewer, and neither is enforced: nothing in <code>garnet run</code> treats <code>@sandbox</code> as a boundary, and a <code>@caps()</code> placed before a module does not bind the functions inside it. As emitted today the file does not pass <code>garnet check</code> &mdash; the parser rejects the <code>@sandbox</code> line &mdash; so converted code is held to a capability budget only after a reviewer annotates its functions.</p>
     <table style="border-collapse:collapse;width:100%;margin:6px 0 14px;font-size:14px;color:var(--ink-soft);">
       <tr style="color:var(--ink);"><th style="text-align:left;padding:8px 12px;border-bottom:1px solid var(--rule);">Tier</th><th style="text-align:left;padding:8px 12px;border-bottom:1px solid var(--rule);">What it means</th></tr>
       <tr><td style="padding:8px 12px;"><strong style="color:var(--gold);">Active conversion</strong><br><span style="color:var(--ink-muted);">Rust · Ruby · Python · Go</span></td><td style="padding:8px 12px;">Deterministic frontends — carries ownership-like shape, module boundaries, and migration evidence with deterministic behavior.</td></tr>
