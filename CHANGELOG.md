@@ -1,5 +1,27 @@
 # Changelog
 
+## Unreleased — site: the language site returns as the front door (2026-09-10)
+
+- **Changed:** `docs/index.html` is the long-scroll language site again
+  (restored from the #534 page), carrying the September hero, wordmark and
+  sentence. `check → diff-caps → seal` is the first code on the page, and the
+  committed WebAssembly playground mounts beneath it on request.
+- **Changed — promo lane:** the thirty-second promo is no longer embedded on
+  the front door. The recorded demonstration (take-03) takes its slot,
+  labelled by what each act ran on: the check in the browser playground; the
+  diff, control and seal on a source build of the CLI at `452a0e2`. The promo
+  assets stay in `docs/assets/` for the promo lane's own surfaces
+  (`docs/promo/composition.html`, the site-sync harness).
+- **Fixed:** copy restored from the older page is bounded to
+  `C_Language_Specification/GARNET_CAPABILITY_ENFORCEMENT_SCOPE.md` (U-91):
+  the check-time claim, the mode-boundary bridge, the crossing log, FFI and
+  UDP, and what `garnet verify` checks.
+- **Fixed:** content below the hero was invisible without JavaScript; phones
+  had no navigation; a 390 px viewport overflowed; heading accents fell below
+  WCAG contrast. The footer carries the real IDC mark (#565), right-sized.
+- **Scope:** docs, service worker and ledger only; no shipped-binary behavior
+  change; no gate file and no trust-kernel path.
+
 ## Unreleased — gate hardening: dogfood PR-body checker section boundary, exact headings, evidence tokens (2026-09-02)
 
 ### `scripts/check_dogfood_pr_body.py` — crown D-1, hardening H3-01, crown D-N4 cured

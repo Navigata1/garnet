@@ -1,4 +1,4 @@
-const CACHE_NAME = "garnet-web-v3";
+const CACHE_NAME = "garnet-web-v4";
 const OFFLINE_ASSETS = [
   "./",
   "getting-started.html",
@@ -15,9 +15,8 @@ const OFFLINE_ASSETS = [
   "blog/index.html",
   "blog/feed.xml",
   "releases.xml",
-  "assets/garnet-promo.mp4",
-  "assets/garnet-promo.webm",
-  "assets/garnet-promo-poster.png",
+  "assets/garnet-hero.webp",
+  "assets/garnet-demonstration-poster.jpg",
   "icons/garnet-192.png",
   "icons/garnet-512.png"
 ];
@@ -64,7 +63,9 @@ self.addEventListener("fetch", (event) => {
         return hit;
       }
       return fetch(request).then((response) => {
-        if (request.method === "GET" && response.ok) {
+        // A video is fetched in ranges; a 206 cannot be cached, and a 5 MB file should not be.
+        const ranged = Boolean(request.headers && request.headers.has && request.headers.has("range"));
+        if (request.method === "GET" && response.ok && response.status !== 206 && !ranged) {
           const copy = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
         }
