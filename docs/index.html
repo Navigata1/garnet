@@ -48,6 +48,9 @@
     --crimson:      #830323;          /* the ruby T — sampled from the hero plate */
     --crimson-lift: #A61232;          /* the same crimson, lifted for small type and edges */
     --cream:        #F2E5D4;          /* the wordmark */
+    --accent-text:  #E0535B;          /* garnet for text: 5.2:1 on --bg, 4.7:1 on --bg-code */
+    --rust-text:    #E0782E;          /* rust for text: 6.4:1 on --bg */
+    --ruby-text:    #FF5A5A;          /* ruby for text: 6.4:1 on --bg */
     --serif:        'Georgia', 'Source Serif Pro', serif;
     --display:      'Iowan Old Style', 'Palatino Linotype', Palatino, 'Source Serif Pro', Georgia, serif;
     --sans:         -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
@@ -332,7 +335,7 @@
     color: var(--ink);
     letter-spacing: 0.02em;
   }
-  h2 .accent { color: var(--garnet); }
+  h2 .accent { color: var(--accent-text); }
   h3 {
     font-family: var(--sans);
     font-size: 18px;
@@ -387,9 +390,9 @@
     background: linear-gradient(180deg, rgba(156,43,46,0.06) 0%, var(--bg-soft) 100%);
   }
   .pillar h3 { letter-spacing: 0.18em; font-size: 14px; }
-  .pillar.rust h3   { color: var(--rust); }
-  .pillar.ruby h3   { color: var(--ruby); }
-  .pillar.garnet h3 { color: var(--garnet); }
+  .pillar.rust h3   { color: var(--rust-text); }
+  .pillar.ruby h3   { color: var(--ruby-text); }
+  .pillar.garnet h3 { color: var(--accent-text); }
   .pillar .name {
     font-family: var(--serif);
     font-size: 36px;
@@ -397,9 +400,9 @@
     margin: 4px 0 16px;
     letter-spacing: 0.04em;
   }
-  .pillar.rust .name   { color: var(--rust); }
-  .pillar.ruby .name   { color: var(--ruby); }
-  .pillar.garnet .name { color: var(--garnet); }
+  .pillar.rust .name   { color: var(--rust-text); }
+  .pillar.ruby .name   { color: var(--ruby-text); }
+  .pillar.garnet .name { color: var(--accent-text); }
   .pillar p { color: var(--ink); margin: 0 0 14px; font-size: 15px; }
   .pillar .caveat { color: var(--ink-muted); font-size: 14px; font-style: italic; }
 
@@ -420,7 +423,7 @@
     padding: 0 20px;
   }
   .thesis blockquote .accent {
-    color: var(--garnet);
+    color: var(--accent-text);
     font-style: italic;
   }
   .thesis cite {
@@ -454,7 +457,7 @@
   }
   .tab:hover { color: var(--ink); }
   .tab.active {
-    color: var(--garnet);
+    color: var(--accent-text);
     border-bottom-color: var(--garnet);
     font-weight: 600;
   }
@@ -485,9 +488,9 @@
   .code-col .swatch {
     width: 4px; height: 18px; border-radius: 2px;
   }
-  .code-col.rust .swatch   { background: var(--rust);   } .code-col.rust .head   { color: var(--rust);   }
-  .code-col.ruby .swatch   { background: var(--ruby);   } .code-col.ruby .head   { color: var(--ruby);   }
-  .code-col.garnet .swatch { background: var(--garnet); } .code-col.garnet .head { color: var(--garnet); }
+  .code-col.rust .swatch   { background: var(--rust);   } .code-col.rust .head   { color: var(--rust-text);   }
+  .code-col.ruby .swatch   { background: var(--ruby);   } .code-col.ruby .head   { color: var(--ruby-text);   }
+  .code-col.garnet .swatch { background: var(--garnet); } .code-col.garnet .head { color: var(--accent-text); }
   .code-col pre {
     margin: 0;
     padding: 18px 20px;
@@ -819,6 +822,23 @@
   }
   footer .copyright { color: var(--ink-muted); }
 
+  footer .builtby-row { display: flex; justify-content: center; margin-bottom: 18px; }
+  footer .builtby {
+    display: inline-flex; align-items: center; gap: 10px;
+    font: 600 11.5px var(--mono); letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  footer .builtby img { border-radius: 6px; }
+  footer .builtby b { color: var(--ink); font-weight: 600; }
+
+  /* A pre never widens the page; long lines scroll inside it. */
+  pre { max-width: 100%; overflow-x: auto; }
+
+  /* Keyboard focus is drawn, not left to the user agent. */
+  a:focus-visible, button:focus-visible, .btn:focus-visible, .tab:focus-visible {
+    outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px;
+  }
+
   /* ─── Responsive ───────────────────────────────────────────── */
   @media (max-width: 900px) {
     nav.top .container { flex-wrap: wrap; gap: 12px 18px; }
@@ -838,6 +858,7 @@
     .doc-cards { grid-template-columns: 1fr; }
   }
   @media (max-width: 540px) {
+    .pillar p, .pillar .name, .evidence-note code, .feature p code { overflow-wrap: anywhere; }
     .features { grid-template-columns: 1fr; }
     .numbers { grid-template-columns: 1fr 1fr; }
   }
@@ -909,10 +930,9 @@
   <div class="container reveal">
     <h3>Start here</h3>
     <h2>Check, then <span class="accent">diff the authority</span>, then seal.</h2>
-    <p class="lead">Most language sites open with a greeting. This one opens with a rejection, because that is the product: a function that has not declared <code style="color:var(--gold);background:var(--bg-code);padding:2px 8px;border-radius:4px;font-family:var(--mono)">net</code> cannot reach the network, a diff answers <em>what new authority am I granting?</em>, and a seal writes the paperwork out of evidence that already exists.</p>
+    <p class="lead">Most language sites open with a greeting. This one opens with a rejection, because that is the product. The function below is annotated <code>@caps()</code> and calls <code>net::tcp_connect</code>; <code>garnet check</code> refuses it and exits 1. A diff then answers <em>what new authority does this change declare?</em>, and a seal writes the paperwork out of evidence that already exists.</p>
 
     <div class="term">
-<div class="term">
         <div class="term-bar" aria-hidden="true"><i class="dotr"></i><i class="dotr"></i><i class="dotr"></i><span>garnet 0.8.1 · built at fbd64bc5 · fresh directory</span><span class="real">real capture</span></div>
         <pre><span class="c">$ cat exfil.garnet</span>
 @caps()
@@ -933,10 +953,9 @@ def main() {
 <span class="c">$ garnet seal hello.garnet</span>
 {"_type":"https://in-toto.io/Statement/v1","subject":[{"name":"hello","digest":{"blake3":"be28668b…bf8845c2"}}],"predicateType":"https://garnet-lang.org/attestation/seal/v1",…
 <span class="g">garnet seal:</span> cosign not installed — in-toto predicate emitted UNSIGNED (wrap-don't-rebuild: install cosign to attest; Garnet does not sign supply-chain itself)</pre>
-      </div>
     </div>
 
-    <p class="evidence-note">Captured unedited on 2026-09-02 from <code>garnet 0.8.1</code> built at main <code>fbd64bc5</code>, in a fresh directory with no <code>.garnet-cache</code>; only long JSON lines are elided with an ellipsis. The checker rejects an undeclared call reached along a named, acyclic call chain from an annotated function &mdash; that is the bound it proves, and <a href="why.html">why.html</a> states where the bound ends. <a href="#try">Run check and diff-caps yourself, in the browser &rarr;</a></p>
+    <p class="evidence-note">Captured unedited on 2026-09-02 from <code>garnet 0.8.1</code> built at main <code>fbd64bc5</code>, in a fresh directory with no <code>.garnet-cache</code>; only long JSON lines are elided with an ellipsis. The checker rejects an undeclared call reached along a named, acyclic call chain from an annotated function &mdash; that is the bound the check holds to, and the <a href="https://github.com/Island-Dev-Crew/garnet/blob/main/C_Language_Specification/GARNET_CAPABILITY_ENFORCEMENT_SCOPE.md">capability enforcement scope</a> states where it ends. <code>garnet run</code> does not invoke the checker. <a href="#try">Run check and diff-caps yourself, in the browser &rarr;</a></p>
   </div>
 </section>
 
@@ -944,15 +963,15 @@ def main() {
 <section id="try" class="dense">
   <div class="container reveal">
     <h3>Try it</h3>
-    <h2>The same checker, <span class="accent">in your browser</span>.</h2>
-    <p class="lead">The capture above ran on a machine you have to take our word for. This one runs on yours. It is a committed WebAssembly build of the same checker, with three of the same acts &mdash; run a program, check it, and diff its declared capability surface against a baseline &mdash; and it loads only when you ask, because the runtime is 2.2&nbsp;MB and a landing page should not spend that uninvited.</p>
+    <h2>The checker, <span class="accent">in your browser</span>.</h2>
+    <p class="lead">The capture above ran on a machine you have to take our word for. This one runs on yours. It is a committed WebAssembly build of Garnet's checker. It runs two of the capture's acts &mdash; check a program, and diff its declared capability surface against a baseline &mdash; plus run; sealing stays on the command line. It loads only when you ask, because the runtime is 2.2&nbsp;MB and a landing page should not spend that uninvited.</p>
 
     <div class="pg-mount" id="pg-mount">
       <a class="btn btn-primary" id="pg-load" href="playground.html">Load the checker and run it here <span aria-hidden="true">&rarr;</span></a>
-      <p class="pg-note">Delete the <code>@caps(net)</code> from an example and check it again &mdash; the rejection you just read is the one you will get.</p>
+      <p class="pg-note">Choose <em>Custom source</em>, paste the five-line program from the capture above, and press <em>Check</em> &mdash; the rejection is the one you just read.</p>
     </div>
 
-    <p class="evidence-note">Committed package: <code>garnet_wasm_bg.wasm</code>, 2,216,679 bytes, sha256 <code>e0dcf1a3&hellip;</code>. Clean-browser proof <strong>pass</strong>, captured 2026-09-03 against commit <code>d0a68b98</code> on Chromium 152, with <strong>zero external requests</strong> &mdash; every file it fetched is committed to this repository &mdash; and no OS host authority granted to the runtime. The capability diff is <strong>declared-surface-only</strong>: it reports what a change declares, not the absence of undeclared authority. <a href="playground.html">Open the playground on its own page &rarr;</a></p>
+    <p class="evidence-note">Committed package: <code>garnet_wasm_bg.wasm</code>, 2,216,679 bytes, sha256 <code>e0dcf1a3&hellip;</code>. Clean-browser proof <strong>pass</strong> (<a href="https://github.com/Island-Dev-Crew/garnet/blob/main/F_Project_Management/LAUNCH/W_PLAY_BROWSER_PROOF.json">the recorded run</a>), with <strong>zero external requests</strong> &mdash; every file it fetched is committed to this repository &mdash; and no OS host authority granted to the runtime. The capability diff is <strong>declared-surface-only</strong>: it reports what a change declares, not the absence of undeclared authority. <a href="playground.html">Open the playground on its own page &rarr;</a></p>
   </div>
 </section>
 
@@ -973,7 +992,7 @@ def main() {
         <h3>Garnet</h3>
         <div class="name">Reconciliation</div>
         <p>Managed mode (def + ARC + exceptions) feels Ruby-like. Safe mode (@safe + fn + ownership + Result) feels Rust-like.</p>
-        <p class="caveat">The mode boundary auto-bridges errors and ARC ↔ affine.</p>
+        <p class="caveat">The mode boundary is where errors and ownership meet; the automatic runtime bridge is specified and still deferred.</p>
       </div>
       <div class="pillar ruby">
         <h3>Ruby</h3>
@@ -983,7 +1002,7 @@ def main() {
       </div>
     </div>
     <div style="margin-top:30px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
-      <a href="/why" class="btn btn-primary">Why &mdash; The Skinny &rarr;</a>
+      <a href="why.html" class="btn btn-primary">Why &mdash; The Skinny &rarr;</a>
       <span style="font-size:.95rem;color:var(--ink-soft)">The full case for a capability-typed language in the agent era &mdash; ten reasons, the nearest neighbor, and the verified limits and open work.</span>
     </div>
   </div>
@@ -1008,16 +1027,15 @@ def main() {
       Capability security, bounded execution, and signed provenance are
       <span class="accent">well-precedented</span> — Pony and Austral, Wasmtime
       and eBPF, Sigstore and SLSA each do a piece well. <strong>Garnet's bet is
-      the integration, not the parts:</strong> no existing language combines
-      capability annotations, bounded execution, sealed provenance, and
-      <span class="accent">capability-surface diffing</span>, targeted at
-      agent-authored code.<br><br>
+      the integration, not the parts:</strong> one language that carries
+      capability annotations, deterministic builds, in-toto attestations, and
+      <span class="accent">capability-surface diffing</span>, aimed at
+      agent-authored code and shipping the evidence with it.<br><br>
       The headline is <strong>diff-caps</strong>: when a dependency or an
-      agent's PR changes what authority the code can exercise, Garnet answers
+      agent's PR changes the authority the code declares, Garnet answers
       <em>"what new authority am I granting?"</em> in one screen — turning the
       review bottleneck (the binding constraint on accepting AI-written code)
-      into a machine-checkable diff. That is the part with no cross-language
-      equivalent, and the reason a new language — not a linter — is warranted.
+      into a machine-checkable diff of the declared surface.
     </blockquote>
     <cite>— Positioning, evidence-matched: integration over pillar-by-pillar novelty</cite>
   </div>
@@ -1177,38 +1195,38 @@ def main() {
   <div class="container reveal">
     <h3>Six Pillars</h3>
     <h2>What Garnet adds <span class="accent">at the language layer</span>.</h2>
-    <p class="lead">These are not libraries. They are first-class language constructs — checked at compile time, integrated through the whole toolchain, designed to compose.</p>
+    <p class="lead">These are not libraries. They are language and toolchain constructs — some checked by <code>garnet check</code>, some carried by the runtime or the build — and each card says how far it goes today.</p>
 
     <div class="features">
       <div class="feature">
         <div class="icon">def · fn</div>
         <h4>Dual-Mode Reconciliation</h4>
-        <p>Same grammar, two registers. Managed mode (<code>def</code>) reads like Ruby. Safe mode (<code>@safe fn</code>) reads like Rust. The boundary auto-bridges errors + ownership.</p>
+        <p>Same grammar, two registers. Managed mode (<code>def</code>) reads like Ruby. Safe mode (<code>@safe fn</code>) reads like Rust. Automatic error and ownership bridging at the boundary is specified; today a safe caller converts a managed raise to <code>Err</code> explicitly.</p>
       </div>
       <div class="feature">
         <div class="icon">@safe</div>
         <h4>Visible Mode Boundary</h4>
-        <p>Every managed↔safe call is logged via <code>ModeAuditLog</code>. Reviewers read one file to enumerate every trust crossing in the program.</p>
+        <p><code>garnet check</code> counts every managed↔safe boundary call site. A reviewer-readable crossing log (<code>ModeAuditLog</code>) is modelled in the checker; the CLI does not write it yet.</p>
       </div>
       <div class="feature">
         <div class="icon">@caps(fs)</div>
         <h4>Capability Model</h4>
-        <p>Every function declares its OS-authority budget. The CapCaps propagator verifies transitively at check time: undeclared OS authority fails the check.</p>
+        <p>A function declares its OS-authority budget with <code>@caps</code>. <code>garnet check</code> rejects an undeclared call reached along a named, acyclic call chain from an annotated function, and the fifteen gated host primitives also require the program entry's declared budget at run time.</p>
       </div>
       <div class="feature">
         <div class="icon">memory · 4</div>
         <h4>Agent-Native Memory</h4>
-        <p>First-class <code>memory working|episodic|semantic|procedural</code> keywords. The runtime picks the allocator. Paper VI Contribution 4.</p>
+        <p>First-class <code>memory working|episodic|semantic|procedural</code> declarations, each backed by a reference store (Mnemos). Allocator integration is sequenced on the <a href="https://github.com/Island-Dev-Crew/garnet/blob/main/C_Language_Specification/MEMORY_CORE_ROADMAP.md">Memory Core roadmap</a>, not shipped. Paper VI Contribution 4.</p>
       </div>
       <div class="feature">
         <div class="icon">Ed25519</div>
         <h4>Signed Hot-Reload</h4>
-        <p><code>actor.reload_signed(&amp;sig, ...)</code> with BLAKE3 schema fingerprint catches type mismatches. Zero message loss at 1000 cycles.</p>
+        <p><code>actor.reload_signed(&amp;sig, ...)</code> with BLAKE3 schema fingerprint catches type mismatches. A runtime API, not a keyword.</p>
       </div>
       <div class="feature">
         <div class="icon">--sign</div>
         <h4>Deterministic Signed Manifests</h4>
-        <p><code>garnet build --deterministic --sign</code> emits a byte-identical manifest plus Ed25519 signature. Verify any binary you downloaded.</p>
+        <p><code>garnet build --deterministic --sign &lt;keyfile&gt;</code> emits a deterministic source-provenance manifest with an Ed25519 signature, and <code>garnet verify</code> recomputes it from the source. Release binaries are checked separately, against <code>SHA256SUMS</code> and the <a href="https://github.com/Island-Dev-Crew/garnet/blob/main/docs/release-signing.md">release signing key</a>.</p>
       </div>
     </div>
   </div>
@@ -1230,7 +1248,7 @@ def main() {
         </tr>
         <tr><td style="padding:8px 14px;">Memory safety</td><td style="padding:8px 14px;">Compile-time ownership</td><td style="padding:8px 14px;">Runtime GC</td><td style="padding:8px 14px;color:var(--ink);">Safe mode: ownership · Managed mode: ARC-managed</td></tr>
         <tr><td style="padding:8px 14px;">Cognitive load</td><td style="padding:8px 14px;">High (lifetimes)</td><td style="padding:8px 14px;">Low</td><td style="padding:8px 14px;color:var(--ink);">Progressive — low in managed, Rust-like in safe</td></tr>
-        <tr><td style="padding:8px 14px;">Error model</td><td style="padding:8px 14px;"><code>Result&lt;T,E&gt;</code></td><td style="padding:8px 14px;">Exceptions</td><td style="padding:8px 14px;color:var(--ink);">Both, auto-bridged at the mode boundary</td></tr>
+        <tr><td style="padding:8px 14px;">Error model</td><td style="padding:8px 14px;"><code>Result&lt;T,E&gt;</code></td><td style="padding:8px 14px;">Exceptions</td><td style="padding:8px 14px;color:var(--ink);">Both; automatic bridging at the mode boundary is specified, not yet wired</td></tr>
         <tr><td style="padding:8px 14px;">Concurrency</td><td style="padding:8px 14px;">Threads/async, Send+Sync</td><td style="padding:8px 14px;">GVL-limited</td><td style="padding:8px 14px;color:var(--ink);">Actors + <code>Sendable</code> checking</td></tr>
         <tr><td style="padding:8px 14px;">Agent/memory primitives</td><td style="padding:8px 14px;">Library</td><td style="padding:8px 14px;">Library</td><td style="padding:8px 14px;color:var(--ink);">Language-level (working/episodic/semantic/procedural)</td></tr>
         <tr><td style="padding:8px 14px;">Capability control</td><td style="padding:8px 14px;">External crates</td><td style="padding:8px 14px;">External gems</td><td style="padding:8px 14px;color:var(--ink);"><code>@caps(...)</code> in the language</td></tr>
@@ -1245,8 +1263,8 @@ def main() {
 <section id="caps">
   <div class="container reveal">
     <h3>The Capability Model</h3>
-    <h2>Read one token. <span class="accent">Know the function's authority.</span></h2>
-    <p class="lead"><code>@caps(fs)</code> is a semantic beacon: a single annotation that front-loads the function's OS-authority budget. Both humans and language models can scan a file and reason about what it can — and cannot — do.</p>
+    <h2>Read one token. <span class="accent">Know what the function declares.</span></h2>
+    <p class="lead"><code>@caps(fs)</code> is a semantic beacon: a single annotation that front-loads the function's declared OS-authority budget. Humans and language models can scan a file and read what each function claims, and <code>garnet check</code> rejects the undeclared calls it can trace along named call chains.</p>
 
     <div class="caps-showcase">
       <div class="code-col garnet"><div class="head"><div class="swatch"></div>GARNET</div>
@@ -1258,10 +1276,10 @@ def main() {
   <span class="s">"#{user.name}: #{user.email}"</span>
 }
 
-<span class="c"># compile-time error: caps coverage:</span>
+<span class="c"># garnet check: caps coverage:</span>
 <span class="c"># function `bad` does not declare</span>
 <span class="c"># `fs` but transitively calls</span>
-<span class="c"># `read_file` which requires it</span>
+<span class="c"># `fs::read_file` which requires it</span>
 <span class="a">@caps()</span>
 <span class="k">def</span> bad() {
   fs::read_file(<span class="s">"/etc/passwd"</span>)
@@ -1269,23 +1287,23 @@ def main() {
       <div class="caps-list">
         <div class="row">
           <div class="tag">@caps(fs)</div>
-          <div class="desc">Filesystem read/write/list. Required by every <code>fs::*</code> primitive.</div>
+          <div class="desc">Filesystem read/write/list. Required by every <code>fs::*</code> primitive, and gated at run time.</div>
         </div>
         <div class="row">
           <div class="tag">@caps(net)</div>
-          <div class="desc">Outbound TCP/UDP. NetDefaults gate denies RFC1918 / loopback / link-local by default.</div>
+          <div class="desc">Outbound TCP (<code>net::tcp_connect</code>, gated at run time) under a strict default policy that denies RFC1918, loopback, link-local and cloud-metadata addresses. Listen and UDP are declared, not bridged.</div>
         </div>
         <div class="row">
           <div class="tag">@caps(time)</div>
-          <div class="desc">Wall + monotonic clocks, sleep.</div>
+          <div class="desc">Wall + monotonic clocks, sleep. Checked by <code>garnet check</code>; not gated at run time.</div>
         </div>
         <div class="row">
           <div class="tag">@caps(proc)</div>
-          <div class="desc">Subprocess spawn.</div>
+          <div class="desc">Subprocess spawn and wait, gated at run time.</div>
         </div>
         <div class="row">
           <div class="tag">@caps(ffi)</div>
-          <div class="desc">C FFI. Always logged.</div>
+          <div class="desc">C FFI. Declared in the checker and the manifest; there is no runtime FFI path yet.</div>
         </div>
         <div class="row">
           <div class="tag">@caps(*)</div>
@@ -1597,7 +1615,7 @@ dist/Garnet Studio.app</pre>
   <div class="container reveal">
     <h3>Recorded demonstration</h3>
     <h2>Eighty seconds, <span class="accent">end to end</span>.</h2>
-    <p class="lead">One pass through the whole idea: a check that refuses an undeclared capability, a diff that names the authority a change would add, and a seal that emits an in-toto Statement. Every command's exit code stays on screen.</p>
+    <p class="lead">One pass through the whole idea: the browser playground refuses an undeclared network call, the command line names the authority a change would declare and shows that an unchanged file declares none, and a seal emits an unsigned in-toto Statement.</p>
 
     <div class="promo-frame">
       <video class="promo-video" controls preload="metadata" poster="assets/garnet-demonstration-poster.jpg" width="1920" height="1080">
@@ -1606,7 +1624,7 @@ dist/Garnet Studio.app</pre>
       </video>
     </div>
 
-    <p class="evidence-note">A local screen capture &mdash; take-03 &mdash; of the <strong>source CLI built at main <code>452a0e2</code></strong> on macOS arm64. It is not the released <code>v0.8.1</code> binary, not independent review, and not a launch clearance; the clip says so on its own frames. What it shows is inspectable: the same three acts you can run from <a href="#install">Install</a>, or in the browser at the <a href="#try">playground on this page</a>.</p>
+    <p class="evidence-note">A local recording, take-03, made on macOS arm64 on 2026-09-07. The check runs in the live public playground &mdash; the browser package, whose status is not a process exit code. The diff, the unchanged control and the seal run on a <strong>source build of the CLI at main <code>452a0e2</code></strong> (binary sha256 <code>e548b0d9&hellip;</code>), not the released <code>v0.8.1</code> binary. It is not independent review and not a launch clearance, and its opening and closing cards still carry the capture's own <em>unpublished&nbsp;·&nbsp;hold</em> stamp, set before its publication was decided. Its receipt &mdash; status <code>captured-pass-scoped</code>, recording sha256 <code>40db808f&hellip;</code>, of which this MP4 is a frame-for-frame H.264 encoding &mdash; is not yet published with it. Check and diff run in the <a href="#try">playground on this page</a>; seal needs a build from <a href="#install">Install</a>.</p>
   </div>
 </section>
 
@@ -1683,7 +1701,7 @@ dist/Garnet Studio.app</pre>
       <a href="https://github.com/Island-Dev-Crew/garnet/issues" target="_blank" rel="noopener noreferrer">Questions &amp; bug reports → GitHub Issues</a>
       <a href="https://github.com/Island-Dev-Crew/garnet/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contributing guide</a>
       <a href="https://github.com/Island-Dev-Crew/garnet/blob/main/SECURITY.md" target="_blank" rel="noopener noreferrer">Security disclosure</a>
-      <a href="/blog/">Blog (monthly)</a>
+      <a href="blog/">Blog</a>
       <a href="playground.html">Playground (runs in your browser)</a>
     </div>
     <p class="lead" style="margin-top:16px;font-size:13.5px;color:var(--ink-muted);">Pinned threads to start with: <a href="https://github.com/Island-Dev-Crew/garnet/discussions/204" target="_blank" rel="noopener noreferrer">Welcome</a> · <a href="https://github.com/Island-Dev-Crew/garnet/discussions/205" target="_blank" rel="noopener noreferrer">Show &amp; tell — what are you building</a> · <a href="https://github.com/Island-Dev-Crew/garnet/discussions/206" target="_blank" rel="noopener noreferrer">RFC — package registry shape</a>.</p>
@@ -1692,6 +1710,7 @@ dist/Garnet Studio.app</pre>
 
 <footer>
   <div class="container">
+    <div class="builtby-row"><a class="builtby" href="https://islanddevcrew.com" aria-label="Built by Island Dev Crew"><img src="assets/idc-palm-logo-64.webp" width="30" height="30" alt="" loading="lazy" decoding="async"><span>Built by <b>Island Dev Crew</b></span></a></div>
     <div class="verse">"Where there is no vision, the people perish." — Proverbs 29:18</div>
     <div class="links">
       <a href="https://github.com/Island-Dev-Crew/garnet" target="_blank" rel="noopener noreferrer">GitHub</a>
