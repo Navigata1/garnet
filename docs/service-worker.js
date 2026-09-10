@@ -1,4 +1,4 @@
-const CACHE_NAME = "garnet-web-v3";
+const CACHE_NAME = "garnet-web-v4";
 const OFFLINE_ASSETS = [
   "./",
   "getting-started.html",
@@ -15,9 +15,8 @@ const OFFLINE_ASSETS = [
   "blog/index.html",
   "blog/feed.xml",
   "releases.xml",
-  "assets/garnet-promo.mp4",
-  "assets/garnet-promo.webm",
-  "assets/garnet-promo-poster.png",
+  "assets/garnet-hero.webp",
+  "assets/garnet-demonstration-poster.jpg",
   "icons/garnet-192.png",
   "icons/garnet-512.png"
 ];
