@@ -134,11 +134,28 @@ async function loadExamples() {
     option.dataset.source = example.source;
     ui.example.appendChild(option);
   }
+  // Open on the canonical Hello example, named in the picker, only when no
+  // edit has been recorded and the source still holds its original text. The
+  // second condition covers an edit whose input event the browser has not
+  // dispatched yet (the HTML standard lets it wait for a pause in typing).
+  const hello = [...ui.example.options].find((option) => option.value === "hello");
+  if (hello && ui.source.dataset.edited !== "true" && ui.source.value === ui.source.defaultValue) {
+    hello.selected = true;
+    ui.source.value = hello.dataset.source;
+  }
 }
 
 ui.example.addEventListener("change", () => {
   const option = ui.example.selectedOptions[0];
   if (option?.dataset.source) ui.source.value = option.dataset.source;
+});
+// Once the source no longer matches the chosen preset, the picker says so.
+// (The textarea records any edit itself, in data-edited, on beforeinput and
+// input, from the moment it exists, so an edit made before this module runs
+// is not lost.)
+ui.source.addEventListener("input", () => {
+  const option = ui.example.selectedOptions[0];
+  if (option?.dataset.source && option.dataset.source !== ui.source.value) ui.example.value = "";
 });
 ui.runButton.addEventListener("click", runCurrentSource);
 ui.checkButton.addEventListener("click", checkCurrentSource);
@@ -151,6 +168,16 @@ window.__garnetPlayground = {
   diff: diffCurrentSource,
 };
 
+// The committed presets do not need the runtime, so they load alongside it
+// and stay visible even when the WebAssembly package fails to start.
+const examplesLoaded = loadExamples().catch((error) => {
+  const option = document.createElement("option");
+  option.disabled = true;
+  option.textContent = "Examples unavailable";
+  option.title = error instanceof Error ? error.message : String(error);
+  ui.example.appendChild(option);
+});
+
 try {
   await init();
   publicState.ready = true;
@@ -159,7 +186,6 @@ try {
   for (const button of document.querySelectorAll("[data-action]")) {
     button.disabled = false;
   }
-  await loadExamples();
 } catch (error) {
   publicState.ready = false;
   ui.runtime.textContent = "Runtime failed";

@@ -9,6 +9,46 @@ slice ships labeled "partial," its CHANGELOG entry says so explicitly.
 
 ## [0.8.2] — 2026-09-02 (workspace version bump; the `v0.8.2` tag is not cut)
 
+### Also in 0.8.2 — playground: a runtime that fails to load says so (2026-09-11)
+
+- **Fixed:** when `playground/live.js` could not load (a 404, or a server that
+  sends `.js` with a non-JavaScript type), the module never ran, and the page
+  sat on "Loading runtime" with only "Custom source" in the picker and no
+  error. The module's error event now switches the status to "Runtime
+  failed" and names the cause and a working local server command.
+- **Changed:** the committed presets load alongside the WebAssembly runtime
+  instead of after it, so they stay visible if the runtime fails to start; a
+  preset list that cannot load shows a disabled "Examples unavailable" entry.
+  The page opens on the "Hello, Garnet" preset unless the visitor has already
+  edited the source.
+- **The Hello preset replaces only an untouched source:** the source textarea
+  records an edit in a `data-edited` attribute on both `beforeinput` and
+  `input`, from the moment it exists, and the preset opens only when no edit
+  is recorded and the source still holds its original text. An edit made
+  before the adapter module has run, an edit undone back to the original
+  text, and a changed source whose `input` event the browser has not
+  dispatched yet (the HTML standard lets it wait for a pause in typing) are
+  all kept; the cross-family review found each of these overwrites. Editing a
+  preset returns the picker to "Custom source".
+- **Regression coverage:** `scripts/smoke_garnet_playground_failure_modes.mjs`
+  drives the committed page in headless Chrome through ten journeys: normal
+  load, an edited preset, the module served as `text/plain`, the module 404,
+  presets 404, a WebAssembly runtime failure with presets still loading, an
+  edit before the presets arrive, an edit then restore, a changed source with
+  its input event still pending (modelled by assigning the value without an
+  event), and an edit before the adapter module runs. Faults are injected
+  with `page.route`; timing journeys hold the intercepted request until their
+  edits are done; every journey releases what it holds and records its own
+  errors. Measured: all ten pass; against the page before this change six
+  fail; against the earlier text comparison the edit-then-restore journey
+  fails; against the in-module flag the pending-input and
+  edit-before-the-adapter journeys fail; against the textarea flag alone the
+  pending-input journey fails.
+- **Service worker:** cache `garnet-web-v6` replaces `garnet-web-v5`, so
+  returning visitors fetch the new page and adapter instead of cached copies.
+- The W-PLAY browser proof (`F_Project_Management/LAUNCH/W_PLAY_BROWSER_PROOF.json`)
+  and its screenshot were re-captured on the changed runtime inputs.
+
 ### Also in 0.8.2 — release matrix: Linux ARM64, Linux tarballs, a Windows zip and a PowerShell installer (2026-09-11)
 
 - **Added to the release workflow (`.github/workflows/linux-packages.yml`):**
