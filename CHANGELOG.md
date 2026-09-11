@@ -9,6 +9,66 @@ slice ships labeled "partial," its CHANGELOG entry says so explicitly.
 
 ## [0.8.2] — 2026-09-02 (workspace version bump; the `v0.8.2` tag is not cut)
 
+### Also in 0.8.2 — WV acceptance reporter reads evidence once, by descriptor (2026-09-04)
+
+- **Cured crown finding D-2 in `scripts/garnet_wv_acceptance_status.py`:** the
+  reporter checked evidence, stat'ed it, then reopened it by path, and read it
+  in text mode with universal-newline translation — a CRLF manifest reached
+  `accepted`, and a deterministic check/use swap redirected the manifest read.
+  Every JSON evidence file is now read once through a descriptor bound to
+  what was checked; the byte rule rejects a byte-order mark, any carriage
+  return (with its offset) and non-UTF-8 bytes by name. Artifacts get the
+  same descriptor discipline and keep byte opacity: no CRLF or BOM rule
+  applies to them, because native-Windows evidence legitimately contains
+  CRLF and the contract states no such requirement.
+- **The evidence directory and every path beneath it are bound, not named:**
+  the destination is opened once with `O_DIRECTORY|O_NOFOLLOW` and every
+  read is relative to that descriptor; each intermediate component of an
+  artifact path is opened the same way before the leaf is touched, because
+  `O_NOFOLLOW` protects only the last component (the cross-family review of
+  this change reproduced an accepted nested-parent swap against the earlier
+  head). A platform without `dir_fd` support has NO pathname fallback: the
+  reporter reports `evidence identity cannot be bound on this platform` and
+  never accepts there — the review reproduced an accepted root swap against
+  the fallback. Acceptance therefore runs on POSIX hosts; the committed
+  Windows evidence is judged there.
+- **Nothing is swallowed:** an inventory entry that cannot be inspected, a
+  directory that cannot be opened, and a descriptor that cannot be
+  inspected are each a named finding that keeps the gate `partial`; a
+  symlink, FIFO or socket beside the evidence is a finding, not a skip. The
+  open carries `O_NONBLOCK` so a FIFO substituted between the check and the
+  open cannot park the gate. The post-read identity now includes `ctime`,
+  which catches a same-length rewrite through a hard link with `mtime`
+  restored and a rename-over during the read; it is a change detector, not
+  proof of byte immutability, and the reporter's docstring says exactly
+  that.
+- **WV-6 is unchanged in judgment:** `state partial`, the same two finding
+  categories; the reporter JSON over the real evidence is byte-identical for
+  the base and the cured reporter on the same tree. Across commits the
+  digest hash and the path count inside those two findings track the tree
+  they are computed over, so the finding strings differ while the judgment
+  does not.
+- **Nothing escapes as a raw exception** (reviews v2 and v3): a failure
+  advancing the directory iterator, a failed descriptor duplication at the
+  binding step, and a failed descriptor release — on the manifest, an
+  artifact, a bound parent, an inventory child, or the evidence root — are
+  named findings too. A failed release is never retried, the sibling
+  descriptor the reporter still owns is released once, a release failure that
+  happens while unwinding from another finding is reported beside it (review
+  v4), and absence of the manifest plus a release failure is `partial`, not
+  `pending`. A parent directory renamed or replaced AFTER the
+  reporter bound it is survived, not reported — the read continues in the
+  bound directory and the replacement is never read; the reporter's
+  docstring states that boundary and the unprivileged same-inode `mmap`
+  writer that sits outside the change detector.
+- **An artifact path that names no file is refused before any descriptor
+  is taken** (review v5): `.` passed the path check, because `PurePosixPath`
+  drops `.` components and leaves no parts, and the parent binder then
+  duplicated the root descriptor and raised `IndexError` on the empty parts,
+  leaking the duplicate and escaping `main()`. The path check and the binder
+  both reject it by name now, and that manifest is `partial` again, as it
+  was on the base reporter.
+
 ### Also in 0.8.2 — site: the language site returns as the front door (2026-09-10)
 
 - **Changed:** `docs/index.html` is the long-scroll language site again
