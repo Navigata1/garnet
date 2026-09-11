@@ -48,6 +48,9 @@ slice ships labeled "partial," its CHANGELOG entry says so explicitly.
   still says the clip is "of the source CLI", that the page is 84 KB and that
   390 px does not overflow; all three were corrected before merge (the check
   act runs in the browser playground; the page is 92 KB).
+- **Fixed (round four):** a code tab panel with nothing focusable inside now
+  takes keyboard focus, with the drawn focus ring, so a keyboard user can reach
+  and scroll the example it shows.
 - **Scope:** docs, service worker and ledger only; no shipped-binary behavior
   change; no gate file and no trust-kernel path.
 

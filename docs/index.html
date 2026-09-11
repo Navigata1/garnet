@@ -841,7 +841,7 @@
   .transcript code { overflow-wrap: anywhere; }
 
   /* Keyboard focus is drawn, not left to the user agent. */
-  a:focus-visible, button:focus-visible, .btn:focus-visible, .tab:focus-visible, pre:focus-visible, summary:focus-visible {
+  a:focus-visible, button:focus-visible, .btn:focus-visible, .tab:focus-visible, pre:focus-visible, summary:focus-visible, [role="tabpanel"]:focus-visible {
     outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px;
   }
 
@@ -1814,6 +1814,9 @@ dist/Garnet Studio.app</pre>
         pane.setAttribute('role', 'tabpanel');
         pane.setAttribute('aria-labelledby', tab.id);
         tab.setAttribute('aria-controls', pane.id);
+        // A panel with nothing focusable inside takes focus itself, so a keyboard
+        // user can reach the example and scroll it (the WAI-ARIA tabs pattern).
+        if (!pane.querySelector('a[href], button, input, select, textarea, [tabindex]')) pane.tabIndex = 0;
       }
     });
     const select = (tab, focus) => {
