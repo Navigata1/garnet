@@ -841,9 +841,12 @@
   .transcript code { overflow-wrap: anywhere; }
 
   /* Keyboard focus is drawn, not left to the user agent. */
-  a:focus-visible, button:focus-visible, .btn:focus-visible, .tab:focus-visible, pre:focus-visible, summary:focus-visible {
+  a:focus-visible, button:focus-visible, .btn:focus-visible, .tab:focus-visible, pre:focus-visible, summary:focus-visible, [role="tabpanel"]:focus-visible {
     outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px;
   }
+  /* A focusable example sits in an overflow-hidden .code-col, so its ring is drawn
+     inside the <pre> where the column cannot clip it. */
+  pre:focus-visible { outline-offset: -2px; }
 
   /* ─── Responsive ───────────────────────────────────────────── */
   @media (max-width: 900px) {
@@ -1815,6 +1818,14 @@ dist/Garnet Studio.app</pre>
         pane.setAttribute('role', 'tabpanel');
         pane.setAttribute('aria-labelledby', tab.id);
         tab.setAttribute('aria-controls', pane.id);
+        // A panel with nothing focusable inside gets a keyboard stop (the WAI-ARIA
+        // tabs pattern). The stop goes on each <pre>, the element that actually
+        // scrolls, so arrow keys scroll the example; the panel is the fallback.
+        if (!pane.querySelector('a[href], button, input, select, textarea, [tabindex]')) {
+          const scrollers = pane.querySelectorAll('pre');
+          if (scrollers.length) scrollers.forEach(pre => { pre.tabIndex = 0; });
+          else pane.tabIndex = 0;
+        }
       }
     });
     const select = (tab, focus) => {
