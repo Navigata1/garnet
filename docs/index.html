@@ -844,6 +844,9 @@
   a:focus-visible, button:focus-visible, .btn:focus-visible, .tab:focus-visible, pre:focus-visible, summary:focus-visible, [role="tabpanel"]:focus-visible {
     outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px;
   }
+  /* A focusable example sits in an overflow-hidden .code-col, so its ring is drawn
+     inside the <pre> where the column cannot clip it. */
+  pre:focus-visible { outline-offset: -2px; }
 
   /* ─── Responsive ───────────────────────────────────────────── */
   @media (max-width: 900px) {
