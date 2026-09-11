@@ -18,7 +18,7 @@ built for the code agents write and humans accept.</strong></p>
   <a href="FAQ.md">FAQ</a>
 </p>
 
-<p align="center"><sub>Source on <code>main</code> is <!-- truth:version -->0.8.2<!-- /truth -->; the last signed release is <!-- truth:latest_tag -->v0.8.1<!-- /truth -->.</sub></p>
+<p align="center"><sub>Source on <code>main</code> is <!-- truth:version -->0.8.2<!-- /truth -->; the latest release tag is <!-- truth:latest_tag -->v0.8.1<!-- /truth -->.</sub></p>
 
 ---
 
