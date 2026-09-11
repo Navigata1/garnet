@@ -1814,9 +1814,14 @@ dist/Garnet Studio.app</pre>
         pane.setAttribute('role', 'tabpanel');
         pane.setAttribute('aria-labelledby', tab.id);
         tab.setAttribute('aria-controls', pane.id);
-        // A panel with nothing focusable inside takes focus itself, so a keyboard
-        // user can reach the example and scroll it (the WAI-ARIA tabs pattern).
-        if (!pane.querySelector('a[href], button, input, select, textarea, [tabindex]')) pane.tabIndex = 0;
+        // A panel with nothing focusable inside gets a keyboard stop (the WAI-ARIA
+        // tabs pattern). The stop goes on each <pre>, the element that actually
+        // scrolls, so arrow keys scroll the example; the panel is the fallback.
+        if (!pane.querySelector('a[href], button, input, select, textarea, [tabindex]')) {
+          const scrollers = pane.querySelectorAll('pre');
+          if (scrollers.length) scrollers.forEach(pre => { pre.tabIndex = 0; });
+          else pane.tabIndex = 0;
+        }
       }
     });
     const select = (tab, focus) => {
