@@ -9,6 +9,48 @@ slice ships labeled "partial," its CHANGELOG entry says so explicitly.
 
 ## [0.8.2] — 2026-09-02 (workspace version bump; the `v0.8.2` tag is not cut)
 
+### Also in 0.8.2 — site: the language site returns as the front door (2026-09-10)
+
+- **Changed:** `docs/index.html` is the long-scroll language site again
+  (restored from the #534 page), carrying the September hero, wordmark and
+  sentence. `check → diff-caps → seal` is the first code on the page, and the
+  committed WebAssembly playground mounts beneath it on request.
+- **Changed — promo lane:** the thirty-second promo is no longer embedded on
+  the front door. The recorded demonstration (take-03) takes its slot,
+  labelled by what each act ran on: the check in the browser playground; the
+  diff, control and seal on a source build of the CLI at `452a0e2`. The promo
+  assets stay in `docs/assets/` for the promo lane's own surfaces
+  (`docs/promo/composition.html`, the site-sync harness).
+- **Fixed:** copy restored from the older page is bounded to
+  `C_Language_Specification/GARNET_CAPABILITY_ENFORCEMENT_SCOPE.md` (U-91):
+  the check-time claim, the mode-boundary bridge, the crossing log, FFI and
+  UDP, and what `garnet verify` checks.
+- **Also in #566:** the restored page's own defects were fixed before it
+  landed: content below the hero stayed invisible without JavaScript, phones
+  had no navigation, a 390 px viewport overflowed, and heading accents fell
+  below WCAG contrast. The footer carries the IDC mark (the asset proposed in
+  #565), right-sized.
+- **Fixed (round two):** the Convert section no longer calls converted output
+  "sandboxed": its `@sandbox` and `@caps()` markers are not enforced, and as
+  emitted today the output does not pass `garnet check`; the call-site count is described as a tally, not a crossing
+  analysis; muted text reaches 4.6:1; scripted scrolling honours reduced
+  motion; both tab groups expose tab roles, state and arrow-key navigation; the
+  silent recording has a text version; `omarchy.html` carries the IDC mark.
+- **Fixed (round two):** the hot-reload card named a `reload_signed` API that
+  does not exist; `ActorAddress::reload` takes no signature, and the Ed25519
+  reload-authorisation module is not yet wired into it. The card says so. The
+  service worker lets video and audio bypass it entirely, and its cache moves
+  to `garnet-web-v5`, so a whole file cached under v4 is dropped.
+- **Record:** the take-03 recording was published by the merge of #566
+  (2026-09-10), whose description stated that approving it was the
+  publication decision. Its opening and closing cards still carry the
+  capture's pre-publication *unpublished · hold* stamp. #566's squash message
+  still says the clip is "of the source CLI", that the page is 84 KB and that
+  390 px does not overflow; all three were corrected before merge (the check
+  act runs in the browser playground; the page is 92 KB).
+- **Scope:** docs, service worker and ledger only; no shipped-binary behavior
+  change; no gate file and no trust-kernel path.
+
 ### Minimum Shelf flagship resealed for 0.8.2 (2026-09-04)
 
 - **The bump broke the committed flagship, and the fix is a reseal, not a relaxed
@@ -110,6 +152,39 @@ The sections below are the entries previously recorded as unreleased since
   MESSAGE divergence recorded as crown Finding B-1 is not closed here: both
   backends now refuse these programs, but which of the two gates fires first
   still depends on whether the helper lowered natively or fell back.
+
+### Also in 0.8.2 — gate hardening: dogfood PR-body checker section boundary, exact headings, evidence tokens (2026-09-02)
+
+#### `scripts/check_dogfood_pr_body.py` — crown D-1, hardening H3-01, crown D-N4 cured
+
+- **Fixed (D-1, blocking):** a section ended only at the next literal `### `;
+  a higher-level `## ` heading closes the section in Markdown but was ignored,
+  so a checked item under a later, unrelated `## ` section satisfied the
+  evidence contract. A section now ends at the next heading of the same or
+  higher level; a deeper heading stays inside it.
+- **Fixed (H3-01, medium):** headings matched by prefix and any non-empty
+  checked item counted as evidence, so `### Current truth — none stated` with
+  `- [x] x` under Local, Remote and Evidence passed. Headings now match the
+  contract text exactly after trailing-whitespace normalization, and a checked
+  item counts only when it carries an evidence token (a command/path/value in
+  backticks, a repo path, a 7–40 hex SHA, an `https://` URL, a `#PR`
+  reference, or a numeric result; Remote verification also accepts the named
+  CI/PR check with its expected status, the evidence bundle also a named
+  artifact and where it lives). A vacuous item fails with a problem naming the
+  section and the token classes it needs.
+- **Fixed (D-N4):** the `git diff --name-only` subprocess is bounded at 30 s
+  and fails closed with an explicit `::error::` on timeout.
+- **Calibration:** the merged bodies of #540–#546 all pass; #545 and #546 are
+  committed as positive fixtures under `scripts/fixtures/dogfood_pr_bodies/`.
+  The named-check and named-artifact classes exist because every merged
+  Remote line reads "Fresh PR checks are required to settle before handoff;
+  no CI conclusion is claimed in advance." and #542/#544 name their artifact
+  in prose; the rule was widened rather than the bodies rewritten.
+- **Scope:** gate-script hardening only; no shipped-binary behavior change.
+  This PR modifies the gate it merges under → integrity rule 1:
+  human-merge-only, Codex reviews first. `scripts/check_*` is not a
+  rolling-gate trust prefix (H3-02, a separate act), so the rolling gate
+  reports `touched_paths []` for this change.
 
 ### Also in 0.8.2 — Lane 0 evidence durability repair (2026-07-16)
 
