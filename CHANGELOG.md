@@ -9,6 +9,14 @@ slice ships labeled "partial," its CHANGELOG entry says so explicitly.
 
 ## [Unreleased]
 
+### Gate files — vocabulary and one scope-table narrowing (2026-09-11)
+
+- The retired words leave the CI workflow comments, the capability-manifest
+  standard and its RFC, and the standard's status reporter (purge PR-4).
+  `GARNET_CAPABILITY_ENFORCEMENT_SCOPE.md` now says the "runtime refuses
+  anything undeclared" claim fails for the 5 checker-only `Declared` rows,
+  not for all 65 (58 need no capability and 2 are unbridged).
+
 ### Site — pages say what the code does (2026-09-11)
 
 - **Fixed:** 45 statements on the site pages that said more than the code
